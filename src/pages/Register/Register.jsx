@@ -1,8 +1,38 @@
 import React from "react";
-import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
+import {
+  Alert,
+  Button,
+  Card,
+  Col,
+  Container,
+  Form,
+  Row,
+} from "react-bootstrap";
+import validations from "./Validation";
+import { useFormik } from "formik";
 
 function Register({ setActiveBtn }) {
   setActiveBtn(1);
+
+  const { handleSubmit, handleChange, handleBlur, values, errors, touched } =
+    useFormik({
+      initialValues: {
+        name: "",
+        lastName: "",
+        email: "",
+        department: "",
+      },
+      onSubmit: async (values, bag) => {
+        try {
+         
+        } catch (err) {
+          alert(err.response.statusText);
+          console.log(err);
+        }
+      },
+      validationSchema: validations,
+    });
+
   return (
     <>
       <Container className="mt-3">
@@ -11,13 +41,28 @@ function Register({ setActiveBtn }) {
             <Card className="shadow p-3">
               <Card.Body>
                 <div className="mb-3 mt-md-4">
-                  <h4 className="fw-bold mb-2 text-uppercase ">Brand</h4>
+                  <h4 className="fw-bold mb-2  text-center">Days Off Schedule</h4>
                   <br />
                   <div className="mb-3">
-                    <Form>
+                    <Form onSubmit={handleSubmit}>
                       <Form.Group className="mb-3" controlId="formBasicName">
-                        <Form.Label className="text-center">Name</Form.Label>
-                        <Form.Control type="text" placeholder="Enter Name" />
+                        <Form.Label className="text-bold">Name:</Form.Label>
+                        <Form.Control
+                          type="text"
+                          placeholder="Enter Name"
+                          name="name"
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          value={values.name}
+                          isInvalid={touched.name && errors.name}
+                        />
+                        {errors.name ? (
+                          <Alert variant="warning p-0 mt-1 px-2">
+                            {errors.name}
+                          </Alert>
+                        ) : (
+                          <></>
+                        )}
                       </Form.Group>
 
                       <Form.Group
@@ -25,17 +70,44 @@ function Register({ setActiveBtn }) {
                         controlId="formBasicLastName"
                       >
                         <Form.Label className="text-center">
-                          Last Name
+                          Last Name:
                         </Form.Label>
                         <Form.Control
                           type="text"
-                          placeholder="Enter last name"
+                          placeholder="Enter Last Name"
+                          name="lastName"
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          value={values.lastName}
+                          isInvalid={touched.lastName && errors.lastName}
                         />
+                        {errors.lastName ? (
+                          <Alert variant="warning p-0 mt-1 px-2">
+                            {errors.lastName}
+                          </Alert>
+                        ) : (
+                          <></>
+                        )}
                       </Form.Group>
 
                       <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label className="text-center">Email</Form.Label>
-                        <Form.Control type="email" placeholder="Enter email" />
+                        <Form.Label className="text-center">Email:</Form.Label>
+                        <Form.Control
+                          type="email"
+                          placeholder="Enter Email"
+                          name="email"
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          value={values.email}
+                          isInvalid={touched.email && errors.email}
+                        />
+                        {errors.email ? (
+                          <Alert variant="warning p-0 mt-1 px-2">
+                            {errors.email}
+                          </Alert>
+                        ) : (
+                          <></>
+                        )}
                       </Form.Group>
 
                       <Form.Group
@@ -43,12 +115,24 @@ function Register({ setActiveBtn }) {
                         controlId="formBasicDepartment"
                       >
                         <Form.Label className="text-center">
-                          Department
+                          Department:
                         </Form.Label>
                         <Form.Control
                           type="text"
-                          placeholder="Enter department"
+                          placeholder="Enter Department"
+                          name="department"
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          value={values.department}
+                          isInvalid={touched.department && errors.department}
                         />
+                        {errors.department ? (
+                          <Alert variant="warning p-0 mt-1 px-2">
+                            {errors.department}
+                          </Alert>
+                        ) : (
+                          <></>
+                        )}
                       </Form.Group>
 
                       <div className="d-grid mt-5">

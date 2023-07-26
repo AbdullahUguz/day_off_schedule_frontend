@@ -7,7 +7,7 @@ function NavbarComp({activeBtn}) {
     <>
       <Navbar bg="light" data-bs-theme="light" fixed="top" className="shadow p-3">
         <Container>
-        <Navbar.Brand href="/">
+        <Navbar.Brand href="/" className="fw-bold">
             Days Off Schedule
           </Navbar.Brand>
           <Nav className="me-auto">
