@@ -10,9 +10,13 @@ import {
 } from "react-bootstrap";
 import validations from "./Validation";
 import { useFormik } from "formik";
+import {fetchRegister} from "../../api/api";
+import { useNavigate } from "react-router-dom";
 
 function Register({ setActiveBtn }) {
   setActiveBtn(1);
+  const navigate = useNavigate();
+
 
   const { handleSubmit, handleChange, handleBlur, values, errors, touched } =
     useFormik({
@@ -24,6 +28,19 @@ function Register({ setActiveBtn }) {
       },
       onSubmit: async (values, bag) => {
         try {
+          await fetchRegister({
+            name: values.name,
+            lastName: values.lastName,
+            email: values.email,
+            department: values.department
+          })
+            .then((res) => {
+              navigate("/employees");
+            })
+            .catch((err) => {
+              alert(err.response.statusText);
+              bag.resetForm();
+            });
          
         } catch (err) {
           alert(err.response.statusText);

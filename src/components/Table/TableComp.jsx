@@ -2,72 +2,7 @@ import React, { useState } from "react";
 import { Button, Table } from "react-bootstrap";
 import ModalComp from "../Modal/ModalComp";
 
-function TableComp() {
-  const data = [
-    {
-      id: 1,
-      name: "ali",
-      lastName: "aa",
-      email: "aa@gmail.com",
-      department: "software",
-      dayOff: 20,
-      reamainingDayOff: 5,
-    },
-    {
-      id: 1,
-      name: "sefa",
-      lastName: "aa",
-      email: "aa@gmail.com",
-      department: "software",
-      dayOff: 20,
-      reamainingDayOff: 5,
-    },
-    {
-      id: 1,
-      name: "kemal",
-      lastName: "aa",
-      email: "aa@gmail.com",
-      department: "software",
-      dayOff: 20,
-      reamainingDayOff: 5,
-    },
-    {
-      id: 1,
-      name: "ece",
-      lastName: "aa",
-      email: "aa@gmail.com",
-      department: "software",
-      dayOff: 20,
-      reamainingDayOff: 5,
-    },
-    {
-      id: 1,
-      name: "elif",
-      lastName: "aa",
-      email: "aa@gmail.com",
-      department: "software",
-      dayOff: 20,
-      reamainingDayOff: 5,
-    },
-    {
-      id: 1,
-      name: "ahmet",
-      lastName: "aa",
-      email: "aa@gmail.com",
-      department: "software",
-      dayOff: 20,
-      reamainingDayOff: 5,
-    },
-    {
-      id: 1,
-      name: "lale",
-      lastName: "aa",
-      email: "aa@gmail.com",
-      department: "software",
-      dayOff: 20,
-      reamainingDayOff: 5,
-    },
-  ];
+function TableComp({employees}) {
 
   return (
     <>
@@ -90,8 +25,8 @@ function TableComp() {
           </tr>
         </thead>
         <tbody>
-          {data.map((employee) => (
-            <tr>
+          {employees ? employees.map((employee) => (
+            <tr key={employee.id}>
               <td>{employee.id}</td>
               <td>{employee.name}</td>
               <td>{employee.lastName}</td>
@@ -103,7 +38,7 @@ function TableComp() {
                 <ModalComp employee={employee} />
               </td>
             </tr>
-          ))}
+          )):<></>}
         </tbody>
       </Table>
     </>
