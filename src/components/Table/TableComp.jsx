@@ -33,7 +33,7 @@ function TableComp({employees}) {
               <td>{employee.email}</td>
               <td>{employee.department}</td>
               <td>{employee.dayOff}</td>
-              <td>{employee.reamainingDayOff}</td>
+              <td>{employee.remainingDayOff}</td>
               <td>
                 <ModalComp employee={employee} />
               </td>

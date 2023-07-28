@@ -10,3 +10,10 @@ export const fetchGetAllEmployee = async (input) => {
   return data;
 };
 
+export const fetchUpdateEmployeeRemainingDayOff = async (input) => {
+  const { data } = await axios.put(`http://localhost:8080/employees/remainingDayOff/${input.employeeId}`,{
+    usedDayOff:input.usedDayOff
+  });
+  return data;
+};
+
