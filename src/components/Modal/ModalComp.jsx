@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { Button, Form, Modal } from "react-bootstrap";
+import { Alert, Button, Form, Modal } from "react-bootstrap";
 import { fetchUpdateEmployeeRemainingDayOff } from "../../api/api";
 import { useFormik } from "formik";
-import { useNavigate } from "react-router-dom";
+import validations from "./Validation";
 
-function ModalComp({ employee }) {
-  const navigate = useNavigate();
+function ModalComp({ employee, control, setControl }) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -19,10 +18,10 @@ function ModalComp({ employee }) {
         try {
           await fetchUpdateEmployeeRemainingDayOff({
             employeeId: employee.id,
-            usedDayOff:values.usedDayOff,
+            usedDayOff: values.usedDayOff,
           })
             .then((res) => {
-              navigate("/employees");
+              setControl(!control);
             })
             .catch((err) => {
               alert(err.response.statusText);
@@ -33,9 +32,8 @@ function ModalComp({ employee }) {
           console.log(err);
         }
       },
-      // validationSchema: validations,
+      validationSchema: validations(employee),
     });
-
 
   return (
     <>
@@ -60,17 +58,29 @@ function ModalComp({ employee }) {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.usedDayOff}
-                isInvalid={touched.name && errors.name}
+                isInvalid={touched.usedDayOff && errors.usedDayOff}
                 autoFocus
               />
+              {errors.usedDayOff ? (
+                <Alert variant="warning p-0 mt-1 px-2">
+                  {errors.usedDayOff}
+                </Alert>
+              ) : (
+                <></>
+              )}
             </Form.Group>
             <div>
               <Button variant="secondary" onClick={handleClose}>
                 Close
               </Button>
-              <Button variant="primary" className="mx-2" type="submit" onClick={handleClose}>
-                Save Changes
-              </Button>
+                <Button
+                  variant="primary"
+                  className="mx-2"
+                  type="submit"
+                  onClick={handleClose}
+                >
+                  Save Changes
+                </Button>
             </div>
           </Form>
         </Modal.Body>
