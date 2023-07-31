@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Button, Table } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import ModalComp from "../Modal/ModalComp";
 
-function TableComp({employees}) {
+function TableComp({employees,control,setControl}) {
 
   return (
     <>
@@ -35,7 +35,7 @@ function TableComp({employees}) {
               <td>{employee.dayOff}</td>
               <td>{employee.remainingDayOff}</td>
               <td>
-                <ModalComp employee={employee} />
+                <ModalComp control={control} setControl={setControl} employee={employee} />
               </td>
             </tr>
           )):<></>}
