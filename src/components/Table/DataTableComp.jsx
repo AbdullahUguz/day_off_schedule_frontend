@@ -1,8 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useMemo, useState } from "react";
 import DataTable from "react-data-table-component";
 import ModalComp from "../Modal/ModalComp";
+import FilterComponent from "./FilterComponent";
 
-function DataTableComp({employees,control,setControl}) {
+function DataTableComp({ employees, control, setControl }) {
+
+  const [filterText, setFilterText] = useState('');
+  const [resetPaginationToggle, setResetPaginationToggle] =useState(false);
 
   const columns = [
     {
@@ -48,15 +52,36 @@ function DataTableComp({employees,control,setControl}) {
     },
   ];
 
+  const filteredItems = employees ? employees.filter(
+    item => item.name && item.name?.toLowerCase().includes(filterText?.toLowerCase())
+  ): [];
+
+  const subHeaderComponentMemo = useMemo(() => {
+		const handleClear = () => {
+			if (filterText) {
+				setResetPaginationToggle(!resetPaginationToggle);
+				setFilterText('');
+			}
+		};
+
+		return (
+			<FilterComponent onFilter={e => setFilterText(e.target.value)} onClear={handleClear} filterText={filterText} />
+		);
+	}, [filterText, resetPaginationToggle]);
+
   return (
     <div>
       {employees ? (
         <>
           <DataTable
             columns={columns}
-            data={employees}
+            data={filteredItems}
             fixedHeader
             pagination
+            paginationResetDefaultPage={resetPaginationToggle}
+            subHeader
+            subHeaderComponent={subHeaderComponentMemo}
+            persistTableHead
           ></DataTable>
         </>
       ) : (
