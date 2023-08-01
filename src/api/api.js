@@ -17,3 +17,8 @@ export const fetchUpdateEmployeeRemainingDayOff = async (input) => {
   return data;
 };
 
+export const fetchEmailControl = async (input) => {
+  const { data } = await axios.post(`http://localhost:8080/employees/isEmailExist`,input);
+  return data;
+};
+

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import ModalComp from "../Modal/ModalComp";
-import { fetchGetAllEmployee } from "../../api/api";
 
 function DataTableComp({employees,control,setControl}) {
 
