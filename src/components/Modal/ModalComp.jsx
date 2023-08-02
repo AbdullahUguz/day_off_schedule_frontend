@@ -73,14 +73,23 @@ function ModalComp({ employee, control, setControl }) {
               <Button variant="secondary" onClick={handleClose}>
                 Close
               </Button>
-                <Button
-                  variant="primary"
-                  className="mx-2"
-                  type="submit"
-                  onClick={handleClose}
-                >
-                  Save Changes
-                </Button>
+              {values.usedDayOff && !(errors.usedDayOff) ? (<Button
+                variant="primary"
+                className="mx-2"
+                type="submit"
+                onClick={handleClose}
+              >
+                Save Changes
+              </Button>) : (<Button
+                variant="primary"
+                className="mx-2"
+                type="submit"
+                onClick={handleClose}
+                disabled
+              >
+                Save Changes
+              </Button>)}
+
             </div>
           </Form>
         </Modal.Body>

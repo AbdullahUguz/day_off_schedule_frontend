@@ -12,6 +12,7 @@ import validations from "./Validation";
 import { useFormik } from "formik";
 import { fetchRegister, fetchEmailControl } from "../../api/api";
 import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2';
 
 function Register({ setActiveBtn }) {
   setActiveBtn(1);
@@ -38,14 +39,29 @@ function Register({ setActiveBtn }) {
                   department: values.department
                 })
                   .then((res) => {
-                    navigate("/employees");
+                    Swal.fire({
+                      icon: 'success',
+                      title: 'Employee has been registered',
+                      showConfirmButton: false,
+                      timer: 1100
+                    }).then(()=>{
+                       navigate("/employees");
+                    })
+                   
                   })
                   .catch((err) => {
                     alert(err.response.statusText);
                     bag.resetForm();
                   });
               } else if (res === true) {
-                alert("email control et")
+
+                Swal.fire({
+                  position: 'top-end',
+                  icon: 'warning',
+                  title: 'Email already exist',
+                  showConfirmButton: false,
+                  timer: 1500
+                })
               }
             }).catch((err) => {
               console.log("Emial control error : ", err)
