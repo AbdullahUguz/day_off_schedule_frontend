@@ -4,7 +4,7 @@ import { fetchUpdateEmployeeRemainingDayOff } from "../../api/api";
 import { useFormik } from "formik";
 import validations from "./Validation";
 
-function ModalComp({ employee, control, setControl }) {
+function EditDayOffModal({ employee, control, setControl }) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -62,7 +62,7 @@ function ModalComp({ employee, control, setControl }) {
                 autoFocus
               />
               {errors.usedDayOff ? (
-                <Alert variant="warning p-0 mt-1 px-2">
+                <Alert variant="warning p-0 mt-2 px-2">
                   {errors.usedDayOff}
                 </Alert>
               ) : (
@@ -98,4 +98,4 @@ function ModalComp({ employee, control, setControl }) {
   );
 }
 
-export default ModalComp;
+export default EditDayOffModal;
