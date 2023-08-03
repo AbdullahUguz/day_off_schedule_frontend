@@ -47,14 +47,12 @@ function Register({ setActiveBtn }) {
                     }).then(()=>{
                        navigate("/employees");
                     })
-                   
                   })
                   .catch((err) => {
                     alert(err.response.statusText);
                     bag.resetForm();
                   });
               } else if (res === true) {
-
                 Swal.fire({
                   position: 'top-end',
                   icon: 'warning',

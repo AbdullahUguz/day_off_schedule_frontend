@@ -96,6 +96,12 @@ function DataTableComp({ employees, control, setControl }) {
               timer: 1100
             })
           }).catch(err => {
+            Swal.fire({
+              icon: 'error',
+              title: 'There is a problem',
+              showConfirmButton: false,
+              timer: 1100
+            })
             console.log("delete: ", err)
           })
         }}>Delete</Button>
