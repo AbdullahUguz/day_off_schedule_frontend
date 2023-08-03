@@ -4,6 +4,9 @@ import EditDayOffModal from "../Modal/EditDayOffModal";
 import FilterComponent from "./FilterComponent";
 import { Button } from "react-bootstrap";
 import EditEmployeeModal from "../Modal/EditEmployeeModal";
+import { fetchDeleteEmployee } from "../../api/api";
+import Swal from 'sweetalert2';
+
 
 function DataTableComp({ employees, control, setControl }) {
 
@@ -65,8 +68,8 @@ function DataTableComp({ employees, control, setControl }) {
       },
     },
     {
-      name:"Employee Update",
-      center:true,
+      name: "Employee Update",
+      center: true,
       width: "130px",
       cell: (row) => {
         return (
@@ -77,18 +80,32 @@ function DataTableComp({ employees, control, setControl }) {
       },
     },
     {
-      name:"Employee Delete",
-      cell: () => <Button variant="danger" onClick={clickHandler}>Delete</Button>,
+      name: "Employee Delete",
+      cell: (row) =>
+
+        <Button variant="danger" onClick={async () => {
+          await fetchDeleteEmployee({
+            employeeId: row.id
+          }).then(res => {
+            console.log(res);
+            setControl(!control);
+            Swal.fire({
+              icon: 'success',
+              title: 'Employee has been deleted',
+              showConfirmButton: false,
+              timer: 1100
+            })
+          }).catch(err => {
+            console.log("delete: ", err)
+          })
+        }}>Delete</Button>
+      ,
       ignoreRowClick: true,
       allowOverflow: true,
       button: true,
     },
 
   ];
-
-  const clickHandler = () => {
-    alert("tıklandı")
-  }
 
   const filteredItems = employees ? employees.filter(
     item => item.name && item.name?.toLowerCase().includes(filterText?.toLowerCase())

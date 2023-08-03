@@ -69,7 +69,8 @@ function EditDayOffModal({ employee, control, setControl }) {
                 <></>
               )}
             </Form.Group>
-            <div>
+            <hr />
+            <div style={{ display: 'flex', justifyContent: 'right' }}>
               <Button variant="secondary" onClick={handleClose}>
                 Close
               </Button>

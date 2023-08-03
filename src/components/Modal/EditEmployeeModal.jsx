@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Alert, Button, Form, Modal } from "react-bootstrap";
 import { fetchUpdateEmployeeRemainingDayOff } from "../../api/api";
 import { useFormik } from "formik";
-import validations from "./Validation";
+import validations from "../../pages/Register/Validation";
 
 function EditEmployeeModal({ employee, control, setControl }) {
     const [show, setShow] = useState(false);
@@ -12,14 +12,16 @@ function EditEmployeeModal({ employee, control, setControl }) {
     const { handleSubmit, handleChange, handleBlur, values, errors, touched } =
         useFormik({
             initialValues: {
-                name: "",
-                lastName: "",
-                email: "",
-                department: "",
-                dayOff: "",
+                name: employee && employee.name,
+                lastName: employee && employee.lastName,
+                email: employee && employee.email,  
+                department: employee && employee.department,
+                dayOff: employee && employee.dayOff,
             },
             onSubmit: async (values, bag) => {
                 try {
+
+                    alert(JSON.stringify(values, null, 2));
                     //   await fetchUpdateEmployeeRemainingDayOff({
                     //     employeeId: employee.id,
                     //     usedDayOff: values.usedDayOff,
@@ -36,7 +38,7 @@ function EditEmployeeModal({ employee, control, setControl }) {
                     console.log(err);
                 }
             },
-            validationSchema: validations(employee),
+            validationSchema: validations,
         });
 
     return (
@@ -59,7 +61,8 @@ function EditEmployeeModal({ employee, control, setControl }) {
                                 name="name"
                                 onChange={handleChange}
                                 onBlur={handleBlur}
-                                value={values.name}
+                                // value={values.name}
+                                defaultValue={employee && employee.name}
                                 isInvalid={touched.name && errors.name}
                             />
                             {errors.name ? (
@@ -84,7 +87,8 @@ function EditEmployeeModal({ employee, control, setControl }) {
                                 name="lastName"
                                 onChange={handleChange}
                                 onBlur={handleBlur}
-                                value={values.lastName}
+                                // value={values.lastName}
+                                defaultValue={employee && employee.lastName}
                                 isInvalid={touched.lastName && errors.lastName}
                             />
                             {errors.lastName ? (
@@ -104,7 +108,8 @@ function EditEmployeeModal({ employee, control, setControl }) {
                                 name="email"
                                 onChange={handleChange}
                                 onBlur={handleBlur}
-                                value={values.email}
+                                // value={values.email}
+                                defaultValue={employee && employee.email}
                                 isInvalid={touched.email && errors.email}
                             />
                             {errors.email ? (
@@ -129,7 +134,8 @@ function EditEmployeeModal({ employee, control, setControl }) {
                                 name="department"
                                 onChange={handleChange}
                                 onBlur={handleBlur}
-                                value={values.department}
+                                // value={values.department}
+                                defaultValue={employee && employee.department}
                                 isInvalid={touched.department && errors.department}
                             />
                             {errors.department ? (
@@ -153,7 +159,8 @@ function EditEmployeeModal({ employee, control, setControl }) {
                                 name="dayOff"
                                 onChange={handleChange}
                                 onBlur={handleBlur}
-                                value={values.dayOff}
+                                // value={values.dayOff}
+                                defaultValue={employee && employee.dayOff}
                                 isInvalid={touched.dayOff && errors.dayOff}
                             />
                             {errors.dayOff ? (
@@ -164,8 +171,8 @@ function EditEmployeeModal({ employee, control, setControl }) {
                                 <></>
                             )}
                         </Form.Group>
-
-                        <div >
+                        <hr/>
+                        <div style={{display:'flex', justifyContent:'right'}} >
                             <Button variant="secondary" onClick={handleClose}>
                                 Close
                             </Button>

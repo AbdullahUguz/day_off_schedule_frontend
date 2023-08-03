@@ -22,3 +22,14 @@ export const fetchEmailControl = async (input) => {
   return data;
 };
 
+// export const fetchUpdateEmployee = async (input) => {
+//   const { data } = await axios.post(`http://localhost:8080/employees/isEmailExist`,input);
+//   return data;
+// };
+
+export const fetchDeleteEmployee = async (input) => {
+  const { data } = await axios.delete(`http://localhost:8080/employees/delete/${input.employeeId}`);
+  return data;
+};
+
+
