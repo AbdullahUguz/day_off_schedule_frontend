@@ -50,7 +50,7 @@ function EditEmployeeModal({ employee, control, setControl }) {
         });
     }
 
-    const { handleSubmit, handleChange, handleBlur, errors, touched } =
+    const { handleSubmit, handleChange, handleBlur,values, errors, touched } =
         useFormik({
             initialValues: {
                 employeeId: employee && parseInt(employee.id),
@@ -175,19 +175,55 @@ function EditEmployeeModal({ employee, control, setControl }) {
                                 <></>
                             )}
                         </Form.Group>
+                        <Form.Group
+                            className="mb-3"
+                            controlId="formBasicDayOff"
+                        >
+                            <Form.Label className="text-center">
+                                Day Off:
+                            </Form.Label>
+                            <Form.Control
+                                type="number"
+                                placeholder="Enter DayOff"
+                                name="dayOff"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                defaultValue={employee && employee.dayOff}
+                                isInvalid={touched.dayOff && errors.dayOff}
+                            />
+                            {errors.dayOff ? (
+                                <Alert variant="warning p-0 mt-1 px-2">
+                                    {errors.dayOff}
+                                </Alert>
+                            ) : (
+                                <></>
+                            )}
+                        </Form.Group>
                         <hr />
                         <div style={{ display: 'flex', justifyContent: 'right' }} >
+                           
+
                             <Button variant="secondary" onClick={handleClose}>
                                 Close
                             </Button>
-                            <Button
+                            {values && !(errors.dayOff || errors.department || errors.email || errors.name || errors.lastName) ? (<Button
                                 variant="primary"
                                 className="mx-2"
                                 type="submit"
                                 onClick={handleClose}
+                                
                             >
                                 Save Changes
-                            </Button>
+                            </Button>):(<Button
+                                variant="primary"
+                                className="mx-2"
+                                type="submit"
+                                onClick={handleClose}
+                                disabled
+                            >
+                                Save Changes
+                            </Button>) }
+                            
 
                         </div>
                     </Form>
