@@ -18,6 +18,49 @@ function Register({ setActiveBtn }) {
   setActiveBtn(1);
   const navigate = useNavigate();
 
+
+  const emailControl = async(input,bag)=>{
+    await fetchEmailControl({ email: input.email })
+    .then(async (res) => {
+      if (res === false) {
+       await registerEmployee(input,bag)
+      } else if (res === true) {
+        Swal.fire({
+          position: 'top-end',
+          icon: 'warning',
+          title: 'Email already exist',
+          showConfirmButton: false,
+          timer: 1500
+        })
+      }
+    }).catch((err) => {
+      console.log("Email control error : ", err)
+    });
+  }
+
+  const registerEmployee = async(input,bag)=>{
+    await fetchRegister({
+      name: input.name,
+      lastName: input.lastName,
+      email: input.email,
+      department: input.department
+    })
+      .then((res) => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Employee has been registered',
+          showConfirmButton: false,
+          timer: 1100
+        }).then(()=>{
+           navigate("/employees");
+        })
+      })
+      .catch((err) => {
+        alert(err.response.statusText);
+        bag.resetForm();
+      });
+  }
+
   const { handleSubmit, handleChange, handleBlur, values, errors, touched } =
     useFormik({
       initialValues: {
@@ -28,42 +71,7 @@ function Register({ setActiveBtn }) {
       },
       onSubmit: async (values, bag) => {
         try {
-
-          await fetchEmailControl({ email: values.email })
-            .then(async (res) => {
-              if (res === false) {
-                await fetchRegister({
-                  name: values.name,
-                  lastName: values.lastName,
-                  email: values.email,
-                  department: values.department
-                })
-                  .then((res) => {
-                    Swal.fire({
-                      icon: 'success',
-                      title: 'Employee has been registered',
-                      showConfirmButton: false,
-                      timer: 1100
-                    }).then(()=>{
-                       navigate("/employees");
-                    })
-                  })
-                  .catch((err) => {
-                    alert(err.response.statusText);
-                    bag.resetForm();
-                  });
-              } else if (res === true) {
-                Swal.fire({
-                  position: 'top-end',
-                  icon: 'warning',
-                  title: 'Email already exist',
-                  showConfirmButton: false,
-                  timer: 1500
-                })
-              }
-            }).catch((err) => {
-              console.log("Email control error : ", err)
-            });
+            await emailControl(values,bag) // Register Employee operation inside emailControl()
         } catch (err) {
           alert(err.response.statusText);
           console.log(err);

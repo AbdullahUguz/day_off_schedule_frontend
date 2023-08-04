@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Alert, Button, Form, Modal } from "react-bootstrap";
-import { fetchEmailControl, fetchUpdateEmployee, fetchUpdateEmployeeRemainingDayOff } from "../../api/api";
+import { fetchEmailControl, fetchUpdateEmployee} from "../../api/api";
 import { useFormik } from "formik";
 import validations from "../../pages/Register/Validation";
 import Swal from "sweetalert2";
@@ -50,7 +50,7 @@ function EditEmployeeModal({ employee, control, setControl }) {
         });
     }
 
-    const { handleSubmit, handleChange, handleBlur, values, errors, touched } =
+    const { handleSubmit, handleChange, handleBlur, errors, touched } =
         useFormik({
             initialValues: {
                 employeeId: employee && parseInt(employee.id),
@@ -63,7 +63,9 @@ function EditEmployeeModal({ employee, control, setControl }) {
             onSubmit: async (values) => {
                 try {
                     if (values.email !== employee.email) {
-                        await emailControl(values) // update operation in emailControl method
+                        await emailControl(values) // update operation inside emailControl method
+                    }else{
+                        await updateEmployee(values)
                     }
                 } catch (err) {
                     console.log(err);
