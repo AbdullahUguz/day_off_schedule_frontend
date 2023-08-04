@@ -62,7 +62,7 @@ function Register({ setActiveBtn }) {
                 })
               }
             }).catch((err) => {
-              console.log("Emial control error : ", err)
+              console.log("Email control error : ", err)
             });
         } catch (err) {
           alert(err.response.statusText);

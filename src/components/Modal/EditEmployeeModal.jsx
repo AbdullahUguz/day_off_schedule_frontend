@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Alert, Button, Form, Modal } from "react-bootstrap";
-import { fetchUpdateEmployee, fetchUpdateEmployeeRemainingDayOff } from "../../api/api";
+import { fetchEmailControl, fetchUpdateEmployee, fetchUpdateEmployeeRemainingDayOff } from "../../api/api";
 import { useFormik } from "formik";
 import validations from "../../pages/Register/Validation";
 import Swal from "sweetalert2";
@@ -10,41 +10,62 @@ function EditEmployeeModal({ employee, control, setControl }) {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+    const updateEmployee = async (input) => {
+        await fetchUpdateEmployee(input)
+            .then((res) => {
+                setControl(!control);
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Employee has been updated',
+                    showConfirmButton: false,
+                    timer: 1100
+                })
+            })
+            .catch((err) => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Employee update error',
+                    showConfirmButton: false,
+                    timer: 1100
+                })
+            });
+    }
+
+    const emailControl =async(input) =>{
+        await fetchEmailControl({ email: input.email })
+        .then(async (res) => {
+            if (res === false) {
+                await updateEmployee(input)
+            } else if (res === true) {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'warning',
+                    title: 'Email already exist',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            }
+        }).catch((err) => {
+            console.log("Email control error : ", err)
+        });
+    }
+
     const { handleSubmit, handleChange, handleBlur, values, errors, touched } =
         useFormik({
             initialValues: {
-                employeeId:employee && parseInt(employee.id),
+                employeeId: employee && parseInt(employee.id),
                 name: employee && employee.name,
                 lastName: employee && employee.lastName,
                 email: employee && employee.email,
                 department: employee && employee.department,
                 dayOff: employee && employee.dayOff,
             },
-            onSubmit: async (values, bag) => {
+            onSubmit: async (values) => {
                 try {
-
-                  //  alert(JSON.stringify(values, null, 2));
-                    await fetchUpdateEmployee(values)
-                        .then((res) => {
-                            setControl(!control);
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Employee has been updated',
-                                showConfirmButton: false,
-                                timer: 1100
-                            })
-                        })
-                        .catch((err) => {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Employee update error',
-                                showConfirmButton: false,
-                                timer: 1100
-                            })
-                            bag.resetForm();
-                        });
+                    if (values.email !== employee.email) {
+                        await emailControl(values) // update operation in emailControl method
+                    }
                 } catch (err) {
-                    alert(err.response.statusText);
                     console.log(err);
                 }
             },
