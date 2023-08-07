@@ -1,4 +1,4 @@
-import {object,string,number} from "yup";
+import {object,string} from "yup";
 
 let employeeSchema = object({
     name: string().required("This field cannot be left blank"),

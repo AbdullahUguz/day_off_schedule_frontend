@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Alert, Button, Form, Modal } from "react-bootstrap";
-import { fetchEmailControl, fetchUpdateEmployee} from "../../api/api";
+import { fetchEmailControl, fetchUpdateEmployee} from "../../../api/api";
 import { useFormik } from "formik";
-import validations from "../Modal/ValidationUpdateEmployee";
+import validations from "./ValidationUpdateEmployee";
 import Swal from "sweetalert2";
 
 function EditEmployeeModal({ employee, control, setControl }) {

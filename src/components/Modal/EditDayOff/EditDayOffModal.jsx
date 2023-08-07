@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Alert, Button, Form, Modal } from "react-bootstrap";
-import { fetchEditEmployeeRemainingDayOff, fetchResetRemainingDayOff } from "../../api/api";
+import { fetchEditEmployeeRemainingDayOff, fetchResetRemainingDayOff } from "../../../api/api";
 import { useFormik } from "formik";
 import validations from "./ValidationEditDayOff";
 import Swal from "sweetalert2";

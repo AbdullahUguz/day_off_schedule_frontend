@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Alert,
   Button,
@@ -17,6 +17,7 @@ import Swal from 'sweetalert2';
 function Register({ setActiveBtn }) {
   setActiveBtn(1);
   const navigate = useNavigate();
+  const [validationControl,setValidationControl]=useState(false);
 
 
   const emailControl = async(input,bag)=>{
@@ -101,9 +102,9 @@ function Register({ setActiveBtn }) {
                           onChange={handleChange}
                           onBlur={handleBlur}
                           value={values.name}
-                          isInvalid={touched.name && errors.name}
+                          isInvalid={validationControl && touched.name && errors.name}
                         />
-                        {errors.name ? (
+                        {validationControl && errors.name ? (
                           <Alert variant="warning p-0 mt-1 px-2">
                             {errors.name}
                           </Alert>
@@ -126,9 +127,9 @@ function Register({ setActiveBtn }) {
                           onChange={handleChange}
                           onBlur={handleBlur}
                           value={values.lastName}
-                          isInvalid={touched.lastName && errors.lastName}
+                          isInvalid={validationControl && touched.lastName && errors.lastName}
                         />
-                        {errors.lastName ? (
+                        {validationControl && errors.lastName ? (
                           <Alert variant="warning p-0 mt-1 px-2">
                             {errors.lastName}
                           </Alert>
@@ -146,9 +147,9 @@ function Register({ setActiveBtn }) {
                           onChange={handleChange}
                           onBlur={handleBlur}
                           value={values.email}
-                          isInvalid={touched.email && errors.email}
+                          isInvalid={validationControl && touched.email && errors.email}
                         />
-                        {errors.email ? (
+                        {validationControl && errors.email ? (
                           <Alert variant="warning p-0 mt-1 px-2">
                             {errors.email}
                           </Alert>
@@ -171,9 +172,9 @@ function Register({ setActiveBtn }) {
                           onChange={handleChange}
                           onBlur={handleBlur}
                           value={values.department}
-                          isInvalid={touched.department && errors.department}
+                          isInvalid={validationControl && touched.department && errors.department}
                         />
-                        {errors.department ? (
+                        {validationControl && errors.department ? (
                           <Alert variant="warning p-0 mt-1 px-2">
                             {errors.department}
                           </Alert>
@@ -183,7 +184,7 @@ function Register({ setActiveBtn }) {
                       </Form.Group>
 
                       <div className="d-grid mt-5">
-                        <Button variant="primary" type="submit">
+                        <Button variant="primary" type="submit" onClick={()=>setValidationControl(true)}>
                           Register
                         </Button>
                       </div>

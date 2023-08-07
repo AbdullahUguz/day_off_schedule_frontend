@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { Table } from "react-bootstrap";
-import EditDayOffModal from "../Modal/EditDayOffModal";
+import EditDayOffModal from "../Modal/EditDayOff/EditDayOffModal";
 
 function TableComp({employees,control,setControl}) {
 
