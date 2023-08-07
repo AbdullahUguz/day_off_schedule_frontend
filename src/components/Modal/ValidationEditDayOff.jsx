@@ -1,6 +1,6 @@
 import { object, number } from "yup";
 
-let userSchema = (employee) =>
+let employeeSchema = (employee) =>
   object({
     usedDayOff: number()
       .required("Field cannot be left blank")
@@ -10,4 +10,4 @@ let userSchema = (employee) =>
       .max(employee.remainingDayOff,"Cannot be greater than the remaining day off"),
   });
 
-export default userSchema;
+export default employeeSchema;

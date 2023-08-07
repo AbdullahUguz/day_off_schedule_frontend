@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Alert, Button, Form, Modal } from "react-bootstrap";
 import { fetchEmailControl, fetchUpdateEmployee} from "../../api/api";
 import { useFormik } from "formik";
-import validations from "../../pages/Register/Validation";
+import validations from "../Modal/ValidationUpdateEmployee";
 import Swal from "sweetalert2";
 
 function EditEmployeeModal({ employee, control, setControl }) {
@@ -31,7 +31,7 @@ function EditEmployeeModal({ employee, control, setControl }) {
             });
     }
 
-    const emailControl =async(input) =>{
+    const emailControl = async(input) =>{
         await fetchEmailControl({ email: input.email })
         .then(async (res) => {
             if (res === false) {
@@ -71,7 +71,7 @@ function EditEmployeeModal({ employee, control, setControl }) {
                     console.log(err);
                 }
             },
-            validationSchema: validations,
+            validationSchema: validations(employee),
         });
 
     return (

@@ -10,7 +10,7 @@ export const fetchGetAllEmployee = async (input) => {
   return data;
 };
 
-export const fetchUpdateEmployeeRemainingDayOff = async (input) => {
+export const fetchEditEmployeeRemainingDayOff = async (input) => {
   const { data } = await axios.put(`http://localhost:8080/employees/remainingDayOff/${input.employeeId}`,{
     usedDayOff:input.usedDayOff
   });
@@ -33,3 +33,7 @@ export const fetchDeleteEmployee = async (input) => {
 };
 
 
+export const fetchResetRemainingDayOff = async (input) => {
+  const { data } = await axios.post(`http://localhost:8080/employees/resetRemainingDayOff/${input.employeeId}`);
+  return data;
+};
