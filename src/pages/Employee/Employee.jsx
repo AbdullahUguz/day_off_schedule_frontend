@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Container, Row } from "react-bootstrap";
 import TableComp from "../../components/Table/TableComp";
 import { fetchGetAllEmployee } from "../../api/api";
-import DataTableComp from "../../components/Table/DataTableComp";
+import DataTableEmployee from "../../components/Table/EmployeeDataTable/DataTableEmployee";
 
 function Employee({ setActiveBtn }) {
   setActiveBtn(2);
@@ -25,7 +25,7 @@ function Employee({ setActiveBtn }) {
       <Row className="mt-5 d-flex justify-content-center align-items-center">
         {/* <TableComp employees={employees} control={control} setControl={setControl} /> */}
 
-        <DataTableComp employees={employees} control={control} setControl={setControl}/>
+        <DataTableEmployee employees={employees} control={control} setControl={setControl}/>
       </Row>
     </Container>
   );
