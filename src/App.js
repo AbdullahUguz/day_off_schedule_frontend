@@ -3,6 +3,7 @@ import NavbarComp from "./components/Navbar/NavbarComp";
 import Register from "./pages/Register/Register";
 import Employee from "./pages/Employee/Employee";
 import { useState } from "react";
+import Department from "./pages/Department/Department";
 
 function App() {
   const [activeBtn, setActiveBtn] = useState(0);
@@ -14,6 +15,10 @@ function App() {
         <Route
           path="/employees"
           element={<Employee setActiveBtn={setActiveBtn} />}
+        />
+        <Route
+          path="/departments"
+          element={<Department setActiveBtn={setActiveBtn} />}
         />
       </Routes>
     </BrowserRouter>

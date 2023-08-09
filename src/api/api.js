@@ -1,14 +1,16 @@
 import axios from "axios";
 
 export const fetchRegister = async (input) => {
-  const { data } = await axios.post(`http://localhost:8080/employees/add`, input);
+  const { data } = await axios.post(`http://localhost:8080/employees/create`, input);
   return data;
 };
 
-export const fetchGetAllEmployee = async (input) => {
+export const fetchGetAllEmployee = async () => {
   const { data } = await axios.get(`http://localhost:8080/employees/getAll`);
   return data;
 };
+
+
 
 export const fetchEditEmployeeRemainingDayOff = async (input) => {
   const { data } = await axios.put(`http://localhost:8080/employees/remainingDayOff/${input.employeeId}`,{
@@ -35,5 +37,17 @@ export const fetchDeleteEmployee = async (input) => {
 
 export const fetchResetRemainingDayOff = async (input) => {
   const { data } = await axios.post(`http://localhost:8080/employees/resetRemainingDayOff/${input.employeeId}`);
+  return data;
+};
+
+
+// --- departments ---
+export const fetchGetAllDepartment = async () => {
+  const { data } = await axios.get(`http://localhost:8080/departments/getAll`);
+  return data;
+};
+
+export const fetchCreateDepartment = async (input) => {
+  const { data } = await axios.post(`http://localhost:8080/departments/create`, input);
   return data;
 };

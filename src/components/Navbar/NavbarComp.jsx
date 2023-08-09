@@ -18,6 +18,9 @@ function NavbarComp({activeBtn}) {
             <Link to="/employees">
               <Button variant="btn btn-outline-info" className={activeBtn===2 ? 'active' : ''}>Employees</Button>
               </Link>
+              <Link to="/departments">
+              <Button variant="btn btn-outline-info mx-3" className={activeBtn===3 ? 'active' : ''}>Departments</Button>
+              </Link>
           </Nav>
         </Container>
       </Navbar>
