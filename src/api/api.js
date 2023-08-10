@@ -1,5 +1,7 @@
 import axios from "axios";
 
+//--- employees
+
 export const fetchRegister = async (input) => {
   const { data } = await axios.post(`http://localhost:8080/employees/create`, input);
   return data;

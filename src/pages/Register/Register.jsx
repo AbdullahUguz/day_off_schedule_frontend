@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Alert,
   Button,
@@ -9,42 +9,41 @@ import {
   Row,
 } from "react-bootstrap";
 import validations from "./Validation";
-import { useFormik } from "formik";
-import { fetchRegister, fetchEmailControl } from "../../api/api";
+import { Field, useFormik } from "formik";
+import { fetchRegister, fetchEmailControl, fetchGetAllDepartment } from "../../api/api";
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
 
 function Register({ setActiveBtn }) {
   setActiveBtn(1);
   const navigate = useNavigate();
-  const [validationControl,setValidationControl]=useState(false);
+  const [validationControl, setValidationControl] = useState(false);
+  const [departments, setDepartmnets] = useState();
 
+  useEffect(() => {
+    getAllDepartment();
+  }, [])
 
-  const emailControl = async(input,bag)=>{
-    await fetchEmailControl({ email: input.email })
-    .then(async (res) => {
-      if (res === false) {
-       await registerEmployee(input,bag)
-      } else if (res === true) {
-        Swal.fire({
-          position: 'top-end',
-          icon: 'warning',
-          title: 'Email already exist',
-          showConfirmButton: false,
-          timer: 1500
-        })
-      }
-    }).catch((err) => {
-      console.log("Email control error : ", err)
-    });
+  const getAllDepartment = async () => {
+    try {
+      await fetchGetAllDepartment().then((res) => {
+        setDepartmnets(res);
+      }).catch((err) => {
+        console.log(err)
+      })
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  const registerEmployee = async(input,bag)=>{
+  const registerEmployee = async (input, bag) => {
     await fetchRegister({
-      name: input.name,
-      lastName: input.lastName,
-      email: input.email,
-      department: input.department
+      employee: {
+        name: input.name,
+        lastName: input.lastName,
+        email: input.email,
+      },
+      departmentId: input.departmentId
     })
       .then((res) => {
         Swal.fire({
@@ -52,12 +51,28 @@ function Register({ setActiveBtn }) {
           title: 'Employee has been registered',
           showConfirmButton: false,
           timer: 1100
-        }).then(()=>{
-           navigate("/employees");
+        }).then(() => {
+          navigate("/employees");
         })
       })
       .catch((err) => {
-        alert(err.response.statusText);
+        if (err.response.status == 409) {
+          Swal.fire({
+            position: 'top-end',
+            icon: 'warning',
+            title: 'Email already exist',
+            showConfirmButton: false,
+            timer: 1500
+          })
+        } else {
+          Swal.fire({
+            position: 'top-end',
+            icon: 'error',
+            title: 'There is a problem',
+            showConfirmButton: false,
+            timer: 1500
+          })
+        }
         bag.resetForm();
       });
   }
@@ -68,11 +83,11 @@ function Register({ setActiveBtn }) {
         name: "",
         lastName: "",
         email: "",
-        department: "",
+        departmentId: "",
       },
       onSubmit: async (values, bag) => {
         try {
-            await emailControl(values,bag) // Register Employee operation inside emailControl()
+          await registerEmployee(values);
         } catch (err) {
           alert(err.response.statusText);
           console.log(err);
@@ -160,31 +175,35 @@ function Register({ setActiveBtn }) {
 
                       <Form.Group
                         className="mb-3"
-                        controlId="formBasicDepartment"
+                        controlId="formBasicDepartmentId"
                       >
                         <Form.Label className="text-center">
                           Department:
                         </Form.Label>
-                        <Form.Control
-                          type="text"
-                          placeholder="Enter Department"
-                          name="department"
+                        <Form.Select
+                          aria-label="Default select example"
+                          name='departmentId'
+                          id='departmentId'
                           onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.department}
-                          isInvalid={validationControl && touched.department && errors.department}
-                        />
-                        {validationControl && errors.department ? (
+                        >
+                          <option value={0}>Select Department</option>
+
+                          {departments ? departments.map((department) => (
+                            <option value={department.id}>{department.name}</option>
+                          )) : <></>}
+                        </Form.Select>
+
+                        {validationControl && errors.departmentId ? (
                           <Alert variant="warning p-0 mt-1 px-2">
-                            {errors.department}
+                            {errors.departmentId}
                           </Alert>
                         ) : (
                           <></>
                         )}
                       </Form.Group>
 
-                      <div className="d-grid mt-5">
-                        <Button variant="primary" type="submit" onClick={()=>setValidationControl(true)}>
+                      <div className="d-grid mt-4">
+                        <Button variant="primary" type="submit" onClick={() => setValidationControl(true)}>
                           Register
                         </Button>
                       </div>
