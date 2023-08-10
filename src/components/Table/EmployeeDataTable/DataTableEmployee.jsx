@@ -37,7 +37,7 @@ function DataTableComp({ employees, control, setControl }) {
     },
     {
       name: "Department",
-      selector: (row) => row.department,
+      selector: (row) => row.department.name,
       width: "140px",
 
     },
@@ -45,14 +45,21 @@ function DataTableComp({ employees, control, setControl }) {
       name: "Day Off",
       center: true,
       width: "130px",
-      selector: (row) => row.dayOff,
+      selector: (row) => row.dayOff.dayOff,
     },
     {
       name: "Remaining Day Off",
       center: true,
       width: "140px",
 
-      selector: (row) => row.remainingDayOff,
+      selector: (row) => row.dayOff.remainingDayOff,
+    },
+    {
+      name: "Remaining Day Off",
+      center: true,
+      width: "140px",
+
+      selector: (row) => row.dayOff.explanation,
     },
     {
       name: "Edit Day Off",
