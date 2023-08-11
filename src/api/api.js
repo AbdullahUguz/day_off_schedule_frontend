@@ -12,6 +12,11 @@ export const fetchGetAllEmployee = async () => {
   return data;
 };
 
+//--- day Off---
+export const fetchGetDayOffByEmployeeId = async (input) => {
+  const { data } = await axios.get(`http://localhost:8080/daysOff/getDayOff/${input.employeeId}`);
+  return data;
+};
 
 
 export const fetchEditEmployeeRemainingDayOff = async (input) => {

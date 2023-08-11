@@ -6,6 +6,7 @@ import { Button } from "react-bootstrap";
 import EditEmployeeModal from "../../Modal/EditEpmloyee/EditEmployeeModal";
 import { fetchDeleteEmployee } from "../../../api/api";
 import Swal from 'sweetalert2';
+import { Link } from "react-router-dom";
 
 
 function DataTableComp({ employees, control, setControl }) {
@@ -24,55 +25,61 @@ function DataTableComp({ employees, control, setControl }) {
       name: "Name",
       selector: (row) => row.name,
       sortable: true,
-      width: "130px",
+      width: "150px",
     },
     {
       name: "Last Name",
       selector: (row) => row.lastName,
-      width: "130px",
+      width: "150px",
     },
     {
       name: "Email",
       selector: (row) => row.email,
+      width: "150px",
     },
     {
       name: "Department",
       selector: (row) => row.department.name,
-      width: "140px",
+      width: "150px",
 
     },
     {
       name: "Day Off",
       center: true,
-      width: "130px",
+      width: "140px",
       selector: (row) => row.dayOff.dayOff,
     },
     {
       name: "Remaining Day Off",
       center: true,
       width: "140px",
-
       selector: (row) => row.dayOff.remainingDayOff,
     },
+    // {
+    //   name: "Edit Day Off",
+    //   allowOverflow: true,
+    //   center: true,
+    //   width: "100px",
+    //   cell: (row) => {
+    //     return (
+    //       <>
+    //         <EditDayOffModal control={control} setControl={setControl} employee={row} />
+    //       </>
+    //     );
+    //   },
+    // },
     {
-      name: "Remaining Day Off",
-      center: true,
-      width: "140px",
-
-      selector: (row) => row.dayOff.explanation,
-    },
-    {
-      name: "Edit Day Off",
+      name: "DayOff",
+      cell: (row) =>
+      <Link to={`daysOff/${row.id}`}>
+            <Button variant="info" >
+              Day Off
+            </Button>
+          </Link>
+      ,
+      ignoreRowClick: true,
       allowOverflow: true,
-      center: true,
-      width: "100px",
-      cell: (row) => {
-        return (
-          <>
-            <EditDayOffModal control={control} setControl={setControl} employee={row} />
-          </>
-        );
-      },
+      button: true,
     },
     {
       name: "Employee Update",

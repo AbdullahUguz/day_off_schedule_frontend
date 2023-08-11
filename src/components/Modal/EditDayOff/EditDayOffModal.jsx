@@ -80,7 +80,7 @@ function EditDayOffModal({ employee, control, setControl }) {
           console.log(err);
         }
       },
-      validationSchema: validations(employee),
+  //    validationSchema: validations(employee),
     });
 
   return (
@@ -102,7 +102,7 @@ function EditDayOffModal({ employee, control, setControl }) {
                 </Button>
               </div>
               <h4 className="mb-4">
-                For {employee.name} {employee.lastName}
+                {/* For {employee.name} {employee.lastName} */}
               </h4>
 
               <Form.Control
