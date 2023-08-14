@@ -12,8 +12,13 @@ export const fetchGetAllEmployee = async () => {
   return data;
 };
 
+export const fetchUpdateEmployee = async (input) => {
+  const { data } = await axios.put(`http://localhost:8080/employees/update/${input.employeeId}`,input);
+  return data;
+};
+
 //--- day Off---
-export const fetchGetDayOffByEmployeeId = async (input) => {
+export const fetchGetDayOffById = async (input) => {
   const { data } = await axios.get(`http://localhost:8080/daysOff/getDayOff/${input.employeeId}`);
   return data;
 };
@@ -31,10 +36,7 @@ export const fetchEmailControl = async (input) => {
   return data;
 };
 
-export const fetchUpdateEmployee = async (input) => {
-  const { data } = await axios.put(`http://localhost:8080/employees/update/${input.employeeId}`,input);
-  return data;
-};
+
 
 export const fetchDeleteEmployee = async (input) => {
   const { data } = await axios.delete(`http://localhost:8080/employees/delete/${input.employeeId}`);

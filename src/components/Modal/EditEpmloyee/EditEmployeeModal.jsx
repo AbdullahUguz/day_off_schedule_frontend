@@ -1,77 +1,90 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Alert, Button, Form, Modal } from "react-bootstrap";
-import { fetchEmailControl, fetchUpdateEmployee} from "../../../api/api";
+import { fetchEmailControl, fetchGetAllDepartment, fetchUpdateEmployee } from "../../../api/api";
 import { useFormik } from "formik";
-import validations from "./ValidationUpdateEmployee";
+// import validations from "./ValidationUpdateEmployee";
+import validations from '../../../pages/Register/Validation';
 import Swal from "sweetalert2";
 
 function EditEmployeeModal({ employee, control, setControl }) {
     const [show, setShow] = useState(false);
+    const [departments, setDepartments] = useState();
     const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const handleShow = async () => {
+        await getDepartments()
+        setShow(true);
+    }
 
-    const updateEmployee = async (input) => {
-        await fetchUpdateEmployee(input)
+    const updateEmployee = async (input,bag) => {
+        console.log("employee from update : ",input)
+        await fetchUpdateEmployee({
+            employeeId: employee.id,
+            employee: {
+                name: input.name,
+                lastName: input.lastName,
+                email: input.email,
+            },
+            departmentId: input.departmentId
+        })
             .then((res) => {
-                setControl(!control);
                 Swal.fire({
                     icon: 'success',
                     title: 'Employee has been updated',
                     showConfirmButton: false,
                     timer: 1100
+                }).then(() => {
+                    setControl(!control)
                 })
             })
             .catch((err) => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Employee update error',
-                    showConfirmButton: false,
-                    timer: 1100
-                })
+                if (err.response.status == 409) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'warning',
+                        title: 'Email already exist',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                } else {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'error',
+                        title: 'There is a problem',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
             });
+            bag.resetForm();
     }
 
-    const emailControl = async(input) =>{
-        await fetchEmailControl({ email: input.email })
-        .then(async (res) => {
-            if (res === false) {
-                await updateEmployee(input)
-            } else if (res === true) {
-                Swal.fire({
-                    position: 'top-end',
-                    icon: 'warning',
-                    title: 'Email already exist',
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-            }
+    const getDepartments = async () => {
+        await fetchGetAllDepartment().then(res => {
+            setDepartments(res);
         }).catch((err) => {
-            console.log("Email control error : ", err)
-        });
+            console.log(err)
+        })
     }
 
-    const { handleSubmit, handleChange, handleBlur,values, errors, touched } =
+    const { handleSubmit, handleChange, handleBlur, values, errors, touched } =
         useFormik({
             initialValues: {
                 employeeId: employee && parseInt(employee.id),
                 name: employee && employee.name,
                 lastName: employee && employee.lastName,
                 email: employee && employee.email,
-                department: employee && employee.department,
-                dayOff: employee && employee.dayOff,
+                departmentId: employee && employee.department.id,
+                // dayOff: employee && employee.dayOff,
             },
-            onSubmit: async (values) => {
+            onSubmit: async (values,bag) => {
                 try {
-                    if (values.email !== employee.email) {
-                        await emailControl(values) // update operation inside emailControl method
-                    }else{
-                        await updateEmployee(values)
-                    }
+                    await updateEmployee(values,bag);
                 } catch (err) {
                     console.log(err);
                 }
             },
-            validationSchema: validations(employee),
+            // validationSchema: validations(employee),
+            validationSchema: validations,
         });
 
     return (
@@ -150,50 +163,29 @@ function EditEmployeeModal({ employee, control, setControl }) {
                                 <></>
                             )}
                         </Form.Group>
-
                         <Form.Group
                             className="mb-3"
-                            controlId="formBasicDepartment"
+                            controlId="formBasicDepartmentId"
                         >
                             <Form.Label className="text-center">
                                 Department:
                             </Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="Enter Department"
-                                name="department"
+                            <Form.Select
+                                aria-label="Default select example"
+                                name='departmentId'
+                                id='departmentId'
+                                defaultValue={employee.department && employee.department.id}
                                 onChange={handleChange}
-                                onBlur={handleBlur}
-                                defaultValue={employee && employee.department}
-                                isInvalid={touched.department && errors.department}
-                            />
-                            {errors.department ? (
+                            >
+                                <option value={0}>Select Department</option>
+                                {departments ? departments.map((department) => (
+                                    <option key={department.id} value={department.id}>{department.name}</option>
+                                )) : <></>}
+                            </Form.Select>
+
+                            {validations && errors.departmentId ? (
                                 <Alert variant="warning p-0 mt-1 px-2">
-                                    {errors.department}
-                                </Alert>
-                            ) : (
-                                <></>
-                            )}
-                        </Form.Group>
-                        <Form.Group
-                            className="mb-3"
-                            controlId="formBasicDayOff"
-                        >
-                            <Form.Label className="text-center">
-                                Day Off:
-                            </Form.Label>
-                            <Form.Control
-                                type="number"
-                                placeholder="Enter DayOff"
-                                name="dayOff"
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                defaultValue={employee && employee.dayOff}
-                                isInvalid={touched.dayOff && errors.dayOff}
-                            />
-                            {errors.dayOff ? (
-                                <Alert variant="warning p-0 mt-1 px-2">
-                                    {errors.dayOff}
+                                    {errors.departmentId}
                                 </Alert>
                             ) : (
                                 <></>
@@ -201,20 +193,20 @@ function EditEmployeeModal({ employee, control, setControl }) {
                         </Form.Group>
                         <hr />
                         <div style={{ display: 'flex', justifyContent: 'right' }} >
-                           
+
 
                             <Button variant="secondary" onClick={handleClose}>
                                 Close
                             </Button>
-                            {values && !(errors.dayOff || errors.department || errors.email || errors.name || errors.lastName) ? (<Button
+                            {values && !(errors.dayOff || errors.departmentId || errors.email || errors.name || errors.lastName) ? (<Button
                                 variant="primary"
                                 className="mx-2"
                                 type="submit"
                                 onClick={handleClose}
-                                
+
                             >
                                 Save Changes
-                            </Button>):(<Button
+                            </Button>) : (<Button
                                 variant="primary"
                                 className="mx-2"
                                 type="submit"
@@ -222,13 +214,13 @@ function EditEmployeeModal({ employee, control, setControl }) {
                                 disabled
                             >
                                 Save Changes
-                            </Button>) }
-                            
+                            </Button>)}
+
 
                         </div>
                     </Form>
                 </Modal.Body>
-            </Modal>
+            </Modal >
         </>
     );
 }

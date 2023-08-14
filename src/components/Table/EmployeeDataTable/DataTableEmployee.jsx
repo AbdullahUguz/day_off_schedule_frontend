@@ -40,19 +40,19 @@ function DataTableComp({ employees, control, setControl }) {
     {
       name: "Department",
       selector: (row) => row.department.name,
-      width: "150px",
+      width: "130px",
 
     },
     {
       name: "Day Off",
       center: true,
-      width: "140px",
-      selector: (row) => row.dayOff.dayOff,
+      width: "120px",
+      selector: (row) => row.dayOff.initialDayOff,
     },
     {
       name: "Remaining Day Off",
       center: true,
-      width: "140px",
+      width: "150px",
       selector: (row) => row.dayOff.remainingDayOff,
     },
     // {
@@ -69,17 +69,19 @@ function DataTableComp({ employees, control, setControl }) {
     //   },
     // },
     {
-      name: "DayOff",
+      name: "Day Off Detail",
       cell: (row) =>
       <Link to={`daysOff/${row.id}`}>
-            <Button variant="info" >
-              Day Off
+            <Button variant="info"  >
+              Day Off Detail
             </Button>
           </Link>
       ,
       ignoreRowClick: true,
       allowOverflow: true,
       button: true,
+      width: "130px",
+
     },
     {
       name: "Employee Update",
@@ -159,7 +161,6 @@ function DataTableComp({ employees, control, setControl }) {
 
   return (
     <div>
-      {employees ? (
         <>
           <DataTable
             columns={columns}
@@ -173,9 +174,7 @@ function DataTableComp({ employees, control, setControl }) {
             highlightOnHover
           ></DataTable>
         </>
-      ) : (
-        <>Loading...</>
-      )}
+      
     </div>
   );
 }

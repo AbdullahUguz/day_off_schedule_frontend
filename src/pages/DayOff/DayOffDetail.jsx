@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import DataTableDayOffDetail from '../../components/Table/DayOffDetail/DataTableDayOffDetail'
 import { Container, Row } from 'react-bootstrap'
 import { useParams } from 'react-router-dom';
-import { fetchGetDayOffByEmployeeId } from '../../api/api';
+import { fetchGetDayOffById } from '../../api/api';
 
 function DayOffDetail({setActiveBtn}) {
     setActiveBtn(2);
@@ -11,15 +11,15 @@ function DayOffDetail({setActiveBtn}) {
     const { employeeId } = useParams();
   
     useEffect( ()=>{
-      getDayOffByEmployeeId(employeeId);
+        getDayOffById(employeeId);
     },[control])
   
   
-    const getDayOffByEmployeeId = async (employeeId) => {
-      // await fetchGetDayOffByEmployeeId({employeeId:employeeId}).then((res) => {
-      //   console.log("res : ",res);
-      //   setDaysOff(res);
-      // }).catch(err=>console.log(err));
+    const getDayOffById = async (employeeId) => {
+      await fetchGetDayOffById({employeeId:employeeId}).then((res) => {
+        console.log("res : ",res);
+        setDaysOff(res);
+      }).catch(err=>console.log(err));
     };
   
     return (

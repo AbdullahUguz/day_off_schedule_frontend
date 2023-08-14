@@ -17,6 +17,7 @@ function Employee({ setActiveBtn }) {
   const getAllEmployee = async () => {
     await fetchGetAllEmployee().then((res) => {
       setEmployees(res);
+      console.log("employee res :",res)
     }).catch(err=>console.log(err));
   };
 
