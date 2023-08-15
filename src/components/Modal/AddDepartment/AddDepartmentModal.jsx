@@ -2,6 +2,8 @@ import { useFormik } from 'formik';
 import React, { useState } from 'react'
 import { Alert, Button, Form, Modal } from 'react-bootstrap';
 import { fetchCreateDepartment } from '../../../api/api'
+import Swal from 'sweetalert2';
+import validations from '../AddDepartment/DepartmentValidation'
 
 function AddDepartmentModal({ control, setControl }) {
     const [show, setShow] = useState(false);
@@ -16,17 +18,40 @@ function AddDepartmentModal({ control, setControl }) {
             onSubmit: async (values, bag) => {
                 try {
                     await fetchCreateDepartment(values).then((res) => {
-                        setControl(!control);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Department added',
+                            showConfirmButton: false,
+                            timer: 1100
+                        }).then(() => {
+                            setControl(!control)
+                        })
                         bag.resetForm();
                     }).catch((err) => {
-                        console.log(err);
+                        if (err.response.status == 409) {
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'warning',
+                                title: 'Department already exist',
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                        } else {
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'error',
+                                title: 'There is a problem',
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                        }
                     })
                 } catch (err) {
                     alert(err.response.statusText);
                     console.log(err);
                 }
             },
-            //    validationSchema: validations,
+                validationSchema: validations,
         });
 
     return (
@@ -67,15 +92,7 @@ function AddDepartmentModal({ control, setControl }) {
                             <Button variant="secondary" onClick={handleClose}>
                                 Close
                             </Button>
-                            <Button
-                                variant="primary"
-                                className="mx-2"
-                                type="submit"
-                                onClick={handleClose}
-                            >
-                                Save Changes
-                            </Button>
-                            {/* {values.name && !(errors.name) ? (<Button
+                            {values.name && !(errors.name) ? (<Button
                                 variant="primary"
                                 className="mx-2"
                                 type="submit"
@@ -90,7 +107,7 @@ function AddDepartmentModal({ control, setControl }) {
                                 disabled
                             >
                                 Save Changes
-                            </Button>)} */}
+                            </Button>)}
 
                         </div>
                     </Form>
