@@ -23,6 +23,17 @@ export const fetchGetDayOffById = async (input) => {
   return data;
 };
 
+export const fetchAddDayOffDetail = async (input)=>{
+  const { data } = await axios.post(`http://localhost:8080/daysOff/addDayOffDetail/${input.dayOffId}`,{
+    startDate:new Date(input.dayOffDetail.startDate).toISOString().split('T')[0],
+    endDate:new Date(input.dayOffDetail.endDate).toISOString().split('T')[0],
+    explanation:input.dayOffDetail.explanation,
+    usedDayOff:input.dayOffDetail.usedDayOff
+  });
+  console.log("sss: ",input.dayOffDetail)
+  return data;
+}
+
 
 export const fetchEditEmployeeRemainingDayOff = async (input) => {
   const { data } = await axios.put(`http://localhost:8080/employees/remainingDayOff/${input.employeeId}`,{

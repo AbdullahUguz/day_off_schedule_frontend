@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Alert, Button, Form, Modal } from "react-bootstrap";
-import { fetchEditEmployeeRemainingDayOff, fetchResetRemainingDayOff } from "../../../api/api";
+import { fetchEditEmployeeRemainingDayOff, fetchAddDayOffDetail } from "../../../api/api";
 import { useFormik } from "formik";
 import validations from "./ValidationEditDayOff";
 import Swal from "sweetalert2";
 
 
-function EditDayOffModal({ employee, control, setControl }) {
+function EditDayOffModal({ dayOff, control, setControl }) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -17,17 +17,20 @@ function EditDayOffModal({ employee, control, setControl }) {
     const end = new Date(input.endDate);
     let count = 0;
 
-    const isStartHalfDay = input.startDayPart === 'morning' || input.startDayPart === 'afternoon';
-    const isEndHalfDay = input.endDayPart === 'morning' || input.endDayPart === 'afternoon';
+    const isStartHalfDay = input.startDayPart === 'Morning' || input.startDayPart === 'Afternoon';
+    const isEndHalfDay = input.endDayPart === 'Morning' || input.endDayPart === 'Afternoon';
 
     if (isStartHalfDay && isEndHalfDay) {
       count = 1;
-      start.setDate(start.getDate()+1);
-      end.setDate(end.getDate()-1);
-    } else if (isStartHalfDay ^ isEndHalfDay) {
-      count = 1.5;
-      start.setDate(start.getDate()+1);
-      end.setDate(end.getDate()-1);
+      start.setDate(start.getDate() + 1);
+      end.setDate(end.getDate() - 1);
+    } else if (isStartHalfDay) {
+      count = 0.5;
+      start.setDate(start.getDate() + 1);
+    }
+    else if (isEndHalfDay) {
+      count = .5;
+      end.setDate(end.getDate() - 1);
     }
 
     for (let currentDate = start; currentDate <= end; currentDate.setDate(currentDate.getDate() + 1)) {
@@ -35,13 +38,14 @@ function EditDayOffModal({ employee, control, setControl }) {
         count++;
       }
     }
+    input.usedDayOff=count;
     return count;
   }
 
-  const editRemainingDayOff = async (input, bag) => {
-    await fetchEditEmployeeRemainingDayOff({
-      employeeId: employee.id,
-      usedDayOff: input.usedDayOff,
+  const addDayOffDetail = async (input, bag) => {
+    await fetchAddDayOffDetail({
+      dayOffId: dayOff.id,
+      dayOffDetail:input,
     })
       .then((res) => {
         setControl(!control);
@@ -53,7 +57,7 @@ function EditDayOffModal({ employee, control, setControl }) {
         })
       })
       .catch((err) => {
-        alert(err.response.statusText);
+        alert(err);
         bag.resetForm();
       });
   }
@@ -106,7 +110,8 @@ function EditDayOffModal({ employee, control, setControl }) {
       },
       onSubmit: async (values, bag) => {
         try {
-          await editRemainingDayOff(values, bag)
+          console.log("values : ",values)
+          await addDayOffDetail(values, bag)
         } catch (err) {
           alert(err.response.statusText);
           console.log(err);
@@ -154,9 +159,15 @@ function EditDayOffModal({ employee, control, setControl }) {
                     name='startDayPart'
                     onChange={handleChange}
                   >
-                    <option value="allDay">All Day</option>
-                    <option value="morning">Morning</option>
-                    <option value="afternoon">Afternoon</option>
+                    {/* {
+                    values.startDayPart 
+                    ? (<option value={values.startDayPart}>{values.startDayPart}</option>) 
+                    : (<></>)
+                    } */}
+                    
+                    <option value="All Day">All Day</option>
+                    <option value="Morning">Morning</option>
+                    <option value="Afternoon">Afternoon</option>
                   </Form.Select>
                 ) : <></>
               }
@@ -178,15 +189,19 @@ function EditDayOffModal({ employee, control, setControl }) {
 
               />
               {
-                values.endDate ? (
+                values.endDate && (values.startDate != values.endDate) ? (
                   <Form.Select
                     aria-label="Default select example"
                     name='endDayPart'
                     onChange={handleChange}
                   >
-                    <option value="allDay">All Day</option>
-                    <option value="morning">Morning</option>
-                    <option value="afternoon">Afternoon</option>
+                    {
+                    values.endDayPart 
+                    ? (<option value={values.endDayPart}>{values.endDayPart}</option>) 
+                    : (<option value="All Day">All Day</option>)
+                    }
+                    <option value="Morning">Morning</option>
+                    <option value="Afternoon">Afternoon</option>
 
                   </Form.Select>
                 ) : <></>
@@ -227,22 +242,14 @@ function EditDayOffModal({ employee, control, setControl }) {
               <Button variant="secondary" onClick={handleClose}>
                 Close
               </Button>
-              {values.usedDayOff && !(errors.usedDayOff) ? (<Button
+              <Button
                 variant="primary"
                 className="mx-2"
                 type="submit"
                 onClick={handleClose}
               >
                 Save Changes
-              </Button>) : (<Button
-                variant="primary"
-                className="mx-2"
-                type="submit"
-                onClick={handleClose}
-                disabled
-              >
-                Save Changes
-              </Button>)}
+              </Button>
 
             </div>
           </Form>

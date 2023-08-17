@@ -2,7 +2,7 @@ import React from 'react'
 import DataTable from 'react-data-table-component'
 import EditDayOffModal from '../../Modal/EditDayOff/EditDayOffModal'
 
-function DataTableDayOff({daysOff,control,setControl}) {
+function DataTableDayOff({dayOff,control,setControl}) {
 
   const columns = [
     {
@@ -33,22 +33,22 @@ function DataTableDayOff({daysOff,control,setControl}) {
     },
   ]
 
-  return daysOff ? (
+  return dayOff ? (
     <>
       <div>
         <div>
           <div style={{ display: 'flex', justifyContent: 'left' }}>
-           <strong style={{marginRight:"5px"}}>Day Off :</strong>{daysOff.initialDayOff}
+           <strong style={{marginRight:"5px"}}>Day Off :</strong>{dayOff.initialDayOff}
           </div>
           <div>
-          <strong style={{marginRight:"5px"}}>Remaining Day Off :</strong> {daysOff.remainingDayOff}
+          <strong style={{marginRight:"5px"}}>Remaining Day Off :</strong> {dayOff.remainingDayOff}
           </div>
           <div style={{ display: 'flex', justifyContent: 'right' }}>
-            <EditDayOffModal></EditDayOffModal>
+            <EditDayOffModal dayOff={dayOff} control={control} setControl={setControl}></EditDayOffModal>
           </div>
           <DataTable
             columns={columns}
-            data={daysOff.dayOffDetailList}
+            data={dayOff.dayOffDetailList}
             fixedHeader
             pagination
             highlightOnHover

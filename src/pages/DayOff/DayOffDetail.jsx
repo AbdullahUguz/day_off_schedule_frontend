@@ -7,7 +7,7 @@ import { fetchGetDayOffById } from '../../api/api';
 function DayOffDetail({setActiveBtn}) {
     setActiveBtn(2);
     const [control, setControl] = useState(false);
-    const [daysOff, setDaysOff] = useState();
+    const [dayOff, setDayOff] = useState();
     const { employeeId } = useParams();
   
     useEffect( ()=>{
@@ -18,7 +18,7 @@ function DayOffDetail({setActiveBtn}) {
     const getDayOffById = async (employeeId) => {
       await fetchGetDayOffById({employeeId:employeeId}).then((res) => {
         console.log("res : ",res);
-        setDaysOff(res);
+        setDayOff(res);
       }).catch(err=>console.log(err));
     };
   
@@ -26,7 +26,7 @@ function DayOffDetail({setActiveBtn}) {
         <div>
             <Container style={{ marginTop: 6 + "em" }}>
                 <Row className="mt-5 d-flex justify-content-center align-items-center">
-                    <DataTableDayOffDetail control={control} setControl={setControl} daysOff={daysOff} />
+                    <DataTableDayOffDetail control={control} setControl={setControl} dayOff={dayOff} />
                 </Row>
             </Container>
         </div>
