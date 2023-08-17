@@ -12,35 +12,30 @@ function EditDayOffModal({ employee, control, setControl }) {
   const handleShow = () => setShow(true);
 
 
-  const calculateEndDate = (input) => {
-    if (input.startDate && input.usedDayOff > 0) {
-      const start = new Date(input.startDate);
-      const end = new Date(start);
+  const calculateUsedDayOff = (input) => {
+    const start = new Date(input.startDate);
+    const end = new Date(input.endDate);
+    let count = 0;
 
-      if (input.usedDayOff == 1) {
-        end.setDate(start.getDate())
-      } else {
+    const isStartHalfDay = input.startDayPart === 'morning' || input.startDayPart === 'afternoon';
+    const isEndHalfDay = input.endDayPart === 'morning' || input.endDayPart === 'afternoon';
 
-        let cntrl = input.usedDayOff;
-        let sc = 0;
-
-        let currentDate = new Date(start);
-
-        while (cntrl > 0) {
-          if (currentDate.getDay() === 0 || currentDate.getDay() === 6) {
-            sc++;
-          }
-          cntrl--;
-          currentDate.setDate(currentDate.getDate() + 1);
-        }
-
-        console.log("sc: ", sc, " dayIff: ", input.usedDayOff)
-        end.setDate(start.getDate() + input.usedDayOff + sc);
-
-      }
-      return end.toISOString().split('T')[0];
+    if (isStartHalfDay && isEndHalfDay) {
+      count = 1;
+      start.setDate(start.getDate()+1);
+      end.setDate(end.getDate()-1);
+    } else if (isStartHalfDay ^ isEndHalfDay) {
+      count = 1.5;
+      start.setDate(start.getDate()+1);
+      end.setDate(end.getDate()-1);
     }
-    return null;
+
+    for (let currentDate = start; currentDate <= end; currentDate.setDate(currentDate.getDate() + 1)) {
+      if (currentDate.getDay() !== 0 && currentDate.getDay() !== 6) {
+        count++;
+      }
+    }
+    return count;
   }
 
   const editRemainingDayOff = async (input, bag) => {
@@ -104,7 +99,9 @@ function EditDayOffModal({ employee, control, setControl }) {
       initialValues: {
         usedDayOff: "",
         startDate: "",
+        startDayPart: "",
         endDate: "",
+        endDayPart: "",
         explanation: ""
       },
       onSubmit: async (values, bag) => {
@@ -150,29 +147,62 @@ function EditDayOffModal({ employee, control, setControl }) {
                 autoFocus
                 min={new Date().toISOString().split('T')[0]}
               />
+              {
+                values.startDate ? (
+                  <Form.Select
+                    aria-label="Default select example"
+                    name='startDayPart'
+                    onChange={handleChange}
+                  >
+                    <option value="allDay">All Day</option>
+                    <option value="morning">Morning</option>
+                    <option value="afternoon">Afternoon</option>
+                  </Form.Select>
+                ) : <></>
+              }
+
+
             </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label className="text-bold">Used Day Off:</Form.Label>
-              <Form.Control
-                type="number"
-                placeholder="Enter Count"
-                name="usedDayOff"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.usedDayOff}
-                //   isInvalid={touched.usedDayOff && errors.usedDayOff}
-                autoFocus
-              />
-            </Form.Group>
+
             <Form.Group className="mb-3">
               <Form.Label className="text-bold">End Date:</Form.Label>
               <Form.Control
                 type="date"
                 name="endDate"
-                value={calculateEndDate(values)}
+                value={values.endDate}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 //   isInvalid={touched.startDate && errors.startDate}
+                autoFocus
+                min={new Date().toISOString().split('T')[0]}
+
+              />
+              {
+                values.endDate ? (
+                  <Form.Select
+                    aria-label="Default select example"
+                    name='endDayPart'
+                    onChange={handleChange}
+                  >
+                    <option value="allDay">All Day</option>
+                    <option value="morning">Morning</option>
+                    <option value="afternoon">Afternoon</option>
+
+                  </Form.Select>
+                ) : <></>
+              }
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label className="text-bold">Used Day Off:</Form.Label>
+              <Form.Control
+                type="number"
+                //    placeholder="Enter Count"
+                name="usedDayOff"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={calculateUsedDayOff(values)}
+                //   isInvalid={touched.usedDayOff && errors.usedDayOff}
                 autoFocus
                 disabled
               />
@@ -182,8 +212,8 @@ function EditDayOffModal({ employee, control, setControl }) {
               <Form.Label className="text-bold">Explanation:</Form.Label>
               <Form.Control
                 as="textarea" rows={3}
-                placeholder="Enter Count"
-                name="usedDayOff"
+                placeholder="Enter explanation"
+                name="explanation"
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.explanation}
