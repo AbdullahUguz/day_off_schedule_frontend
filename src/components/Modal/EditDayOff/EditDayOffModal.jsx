@@ -11,6 +11,8 @@ function EditDayOffModal({ dayOff, control, setControl }) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const partsOffDay = [{ part: "All Day" }, { part: "Morning" }, { part: "Afternoon" }];
+
 
   const calculateUsedDayOff = (input) => {
     const start = new Date(input.startDate);
@@ -38,14 +40,14 @@ function EditDayOffModal({ dayOff, control, setControl }) {
         count++;
       }
     }
-    input.usedDayOff=count;
+    input.usedDayOff = count;
     return count;
   }
 
   const addDayOffDetail = async (input, bag) => {
     await fetchAddDayOffDetail({
       dayOffId: dayOff.id,
-      dayOffDetail:input,
+      dayOffDetail: input,
     })
       .then((res) => {
         setControl(!control);
@@ -110,7 +112,7 @@ function EditDayOffModal({ dayOff, control, setControl }) {
       },
       onSubmit: async (values, bag) => {
         try {
-          console.log("values : ",values)
+          console.log("values : ", values)
           await addDayOffDetail(values, bag)
         } catch (err) {
           alert(err.response.statusText);
@@ -158,16 +160,15 @@ function EditDayOffModal({ dayOff, control, setControl }) {
                     aria-label="Default select example"
                     name='startDayPart'
                     onChange={handleChange}
+                    defaultValue={values.startDayPart}
                   >
-                    {/* {
-                    values.startDayPart 
-                    ? (<option value={values.startDayPart}>{values.startDayPart}</option>) 
-                    : (<></>)
-                    } */}
-                    
-                    <option value="All Day">All Day</option>
-                    <option value="Morning">Morning</option>
-                    <option value="Afternoon">Afternoon</option>
+                    <option value={0}>Select Part Of Day</option>
+                    {partsOffDay ? partsOffDay.map(partOfDay => (
+                      <option value={partOfDay.part}>{partOfDay.part}</option>
+                    )) : <></>
+                    }
+
+
                   </Form.Select>
                 ) : <></>
               }
@@ -193,15 +194,14 @@ function EditDayOffModal({ dayOff, control, setControl }) {
                   <Form.Select
                     aria-label="Default select example"
                     name='endDayPart'
+                    defaultValue={values.endDayPart}
                     onChange={handleChange}
                   >
-                    {
-                    values.endDayPart 
-                    ? (<option value={values.endDayPart}>{values.endDayPart}</option>) 
-                    : (<option value="All Day">All Day</option>)
+                    <option value={0}>Select Part Of Day</option>
+                    {partsOffDay ? partsOffDay.map(partOfDay => (
+                      <option value={partOfDay.part}>{partOfDay.part}</option>
+                    )) : <></>
                     }
-                    <option value="Morning">Morning</option>
-                    <option value="Afternoon">Afternoon</option>
 
                   </Form.Select>
                 ) : <></>

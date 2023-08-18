@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import { Alert, Button, Form, Modal } from "react-bootstrap";
-import { fetchEmailControl, fetchGetAllDepartment, fetchUpdateEmployee } from "../../../api/api";
+import {  fetchGetAllDepartment, fetchUpdateEmployee } from "../../../api/api";
 import { useFormik } from "formik";
-// import validations from "./ValidationUpdateEmployee";
 import validations from '../../../pages/Register/Validation';
 import Swal from "sweetalert2";
 
@@ -74,7 +73,6 @@ function EditEmployeeModal({ employee, control, setControl }) {
                 lastName: employee && employee.lastName,
                 email: employee && employee.email,
                 departmentId: employee && employee.department.id,
-                // dayOff: employee && employee.dayOff,
             },
             onSubmit: async (values,bag) => {
                 try {
@@ -83,7 +81,6 @@ function EditEmployeeModal({ employee, control, setControl }) {
                     console.log(err);
                 }
             },
-            // validationSchema: validations(employee),
             validationSchema: validations,
         });
 

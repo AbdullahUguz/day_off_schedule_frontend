@@ -55,19 +55,6 @@ function DataTableComp({ employees, control, setControl }) {
       width: "150px",
       selector: (row) => row.dayOff.remainingDayOff,
     },
-    // {
-    //   name: "Edit Day Off",
-    //   allowOverflow: true,
-    //   center: true,
-    //   width: "100px",
-    //   cell: (row) => {
-    //     return (
-    //       <>
-    //         <EditDayOffModal control={control} setControl={setControl} employee={row} />
-    //       </>
-    //     );
-    //   },
-    // },
     {
       name: "Day Off Detail",
       cell: (row) =>
