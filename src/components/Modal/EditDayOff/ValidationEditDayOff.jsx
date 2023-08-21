@@ -1,13 +1,14 @@
-import { object, number } from "yup";
+import { object, number,string} from "yup";
 
-let employeeSchema = (employee) =>
+let employeeSchema = (dayOff) =>
   object({
     usedDayOff: number()
       .required("Field cannot be left blank")
       .positive()
-      .integer()
-      .min(1,"Used day off must be greater than or equal to 1")
-      .max(employee.remainingDayOff,"Cannot be greater than the remaining day off"),
+      .max(dayOff.remainingDayOff,"Cannot be greater than the remaining day off"),
+      explanation: string().required("Field cannot be left blank"),
+      startDate: string().required("Field cannot be left blank"),
+      endDate: string().required("Field cannot be left blank"),
   });
 
 export default employeeSchema;
