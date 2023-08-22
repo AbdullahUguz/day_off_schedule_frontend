@@ -43,7 +43,7 @@ function DataTableDayOff({dayOff,control,setControl}) {
           <div>
           <strong style={{marginRight:"5px"}}>Remaining Day Off :</strong> {dayOff.remainingDayOff}
           </div>
-          <div style={{ display: 'flex', justifyContent: 'right' }}>
+          <div>
             <EditDayOffModal dayOff={dayOff} control={control} setControl={setControl}></EditDayOffModal>
           </div>
           <DataTable

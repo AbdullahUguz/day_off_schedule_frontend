@@ -125,18 +125,19 @@ function EditDayOffModal({ dayOff, control, setControl }) {
 
   return (
     <>
-      <div className="mb-4" style={{ display: "flex" }}>
-        <div style={{ marginLeft: "10px", justifyContent: 'left' }}>
+      <div className="mb-2" >
+        <div style={{display: "flex", justifyContent: "left" }} className="mt-3">
           <Button variant="warning" onClick={handleResetReaminingDayOff}>
             Remaining Day Off Reset
           </Button>
         </div>
-        <div>
-          <Button variant="info" style={{ marginRight: "5px", justifyContent: 'right' }} onClick={handleShow} className="">
+        <div style={{ display: "flex", justifyContent: "right" }}>
+          <Button variant="info" onClick={handleShow} >
             Edit
           </Button>
         </div>
       </div>
+
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
