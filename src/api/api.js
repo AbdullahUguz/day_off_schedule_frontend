@@ -35,14 +35,27 @@ export const fetchAddDayOffDetail = async (input) => {
   const { data } = await axios.post(
     `http://localhost:8080/daysOff/addDayOffDetail/${input.dayOffId}`,
     {
-      startDate: new Date(input.dayOffDetail.startDate).toISOString().split("T")[0],
-      endDate: new Date(input.dayOffDetail.endDate).toISOString().split("T")[0],
+      startDate:  formatDate(input.dayOffDetail.startDate),
+      endDate:  formatDate(input.dayOffDetail.endDate),
       explanation: input.dayOffDetail.explanation,
       usedDayOff: input.dayOffDetail.usedDayOff,
     }
   );
   return data;
 };
+
+const formatDate = (date) => {
+  const formattedDate = new Date(date);
+  const year = formattedDate.getFullYear();
+  const month = (formattedDate.getMonth() + 1).toString().padStart(2, '0');
+  const day = formattedDate.getDate().toString().padStart(2, '0');
+  const hours = formattedDate.getHours().toString().padStart(2, '0');
+  const minutes = formattedDate.getMinutes().toString().padStart(2, '0');
+
+  console.log(`${day}/${month}/${year} ${hours}:${minutes}`)
+
+  return `${day}/${month}/${year} ${hours}:${minutes}`;
+}
 
 export const fetchResetRemainingDayOff = async (input) => {
   const { data } = await axios.post(
