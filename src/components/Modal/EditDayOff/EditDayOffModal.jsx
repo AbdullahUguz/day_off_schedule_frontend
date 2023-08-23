@@ -12,29 +12,35 @@ function EditDayOffModal({ dayOff, control, setControl }) {
   const handleShow = () => setShow(true);
   const [validationControl, setValidationControl] = useState(false);
 
-  const partsOffDay = [{ part: "All Day" }, { part: "Morning" }, { part: "Afternoon" }];
+  const startTimes = [{ time: "08:00" }, { time: "13:00" }];
+
+  const endTimes = [{ time: "13:00" }, { time: "18:00" }];
+
 
   const calculateUsedDayOff = (input) => {
     const start = new Date(input.startDate);
     const end = new Date(input.endDate);
     let count = 0;
 
-    const isStartHalfDay = input.startDayPart === 'Morning' || input.startDayPart === 'Afternoon';
-    const isEndHalfDay = input.endDayPart === 'Morning' || input.endDayPart === 'Afternoon';
-
-    if (isStartHalfDay && isEndHalfDay) {
-      count = 1;
-      start.setDate(start.getDate() + 1);
-      end.setDate(end.getDate() - 1);
-    } else if (isStartHalfDay) {
-      count = 0.5;
-      start.setDate(start.getDate() + 1);
+    if (input.startDate !== input.endDate) {
+      if (input.startTime === "08:00" && input.endTime === "13:00") {
+        count = 1.5;
+        start.setDate(start.getDate() + 1);
+        end.setDate(end.getDate() - 1);
+      } else if (input.startTime === "13:00" && input.endTime === "18:00") {
+        count = 1.5;
+        start.setDate(start.getDate() + 1);
+        end.setDate(end.getDate() - 1);
+      }
+    } else {
+      if (input.startTime === "08:00" && input.endTime === "13:00") {
+        count = 0.5;
+        start.setDate(start.getDate() + 1);
+      } else if (input.startTime === "13:00" && input.endTime === "18:00") {
+        count = 0.5;
+        start.setDate(start.getDate() + 1);
+      }
     }
-    else if (isEndHalfDay) {
-      count = .5;
-      end.setDate(end.getDate() - 1);
-    }
-
     for (let currentDate = start; currentDate <= end; currentDate.setDate(currentDate.getDate() + 1)) {
       if (currentDate.getDay() !== 0 && currentDate.getDay() !== 6) {
         count++;
@@ -101,14 +107,13 @@ function EditDayOffModal({ dayOff, control, setControl }) {
 
     }
   }
+
   const { handleSubmit, handleChange, handleBlur, values, errors, touched } =
     useFormik({
       initialValues: {
         usedDayOff: "",
-        startDate: "",
-        startDayPart: "",
-        endDate: "",
-        endDayPart: "",
+        startTime: "",
+        endTime: "",
         explanation: ""
       },
       onSubmit: async (values, bag) => {
@@ -126,7 +131,7 @@ function EditDayOffModal({ dayOff, control, setControl }) {
   return (
     <>
       <div className="mb-2" >
-        <div style={{display: "flex", justifyContent: "left" }} className="mt-3">
+        <div style={{ display: "flex", justifyContent: "left" }} className="mt-3">
           <Button variant="warning" onClick={handleResetReaminingDayOff}>
             Remaining Day Off Reset
           </Button>
@@ -161,13 +166,13 @@ function EditDayOffModal({ dayOff, control, setControl }) {
                 values.startDate ? (
                   <Form.Select
                     aria-label="Default select example"
-                    name='startDayPart'
+                    name='startTime'
                     onChange={handleChange}
-                    defaultValue={values.startDayPart}
+                    defaultValue={values.startTime}
                   >
-                    <option value={0}>Select Part Of Day</option>
-                    {partsOffDay ? partsOffDay.map(partOfDay => (
-                      <option value={partOfDay.part}>{partOfDay.part}</option>
+                    <option value={0}>Select start time</option>
+                    {startTimes ? startTimes.map(startT => (
+                      <option value={startT.time}>{startT.time}</option>
                     )) : <></>
                     }
                   </Form.Select>
@@ -195,16 +200,16 @@ function EditDayOffModal({ dayOff, control, setControl }) {
                 min={new Date().toISOString().split('T')[0]}
               />
               {
-                values.endDate && (values.startDate != values.endDate) ? (
+                values.endDate ? (
                   <Form.Select
                     aria-label="Default select example"
-                    name='endDayPart'
-                    defaultValue={values.endDayPart}
+                    name='endTime'
+                    defaultValue={values.endTime}
                     onChange={handleChange}
                   >
                     <option value={0}>Select Part Of Day</option>
-                    {partsOffDay ? partsOffDay.map(partOfDay => (
-                      <option value={partOfDay.part}>{partOfDay.part}</option>
+                    {endTimes ? endTimes.map(endT => (
+                      <option value={endT.time}>{endT.time}</option>
                     )) : <></>
                     }
 
@@ -264,18 +269,52 @@ function EditDayOffModal({ dayOff, control, setControl }) {
             <hr />
 
             <div style={{ display: 'flex', justifyContent: 'right' }}>
-              <Button variant="secondary" onClick={handleClose}>
-                Close
-              </Button>
-              <Button
+              {new Date(values.startDate) <= new Date(values.endDate) ? (
+                <>
+                  <Button variant="secondary" onClick={handleClose}>
+                    Close
+                  </Button>
+                  <Button
+                    variant="primary"
+                    className="mx-2"
+                    type="submit"
+                    onClick={() => setValidationControl(true)}
+                  >
+                    Save Changes
+                  </Button></>
+              ) : (<>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Alert variant="warning p-0 mt-1" style={{ flex: '1' }}>
+                    Start date cannot be greater than end date
+                  </Alert>
+                  <div>
+                    <Button variant="secondary" onClick={handleClose}>
+                      Close
+                    </Button>
+                  </div>
+                  <div>
+                    <Button
+                      variant="primary"
+                      className="mx-2"
+                      type="submit"
+                      onClick={() => setValidationControl(true)}
+                      disabled
+                    >
+                      Save Changes
+                    </Button>
+                  </div>
+                </div>
+              </>
+              )}
+
+              {/* <Button
                 variant="primary"
                 className="mx-2"
                 type="submit"
-                // onClick={handleClose}
                 onClick={() => setValidationControl(true)}
               >
                 Save Changes
-              </Button>
+              </Button> */}
 
             </div>
           </Form>
