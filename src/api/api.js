@@ -35,8 +35,8 @@ export const fetchAddDayOffDetail = async (input) => {
   const { data } = await axios.post(
     `http://localhost:8080/daysOff/addDayOffDetail/${input.dayOffId}`,
     {
-      startDate:  formatDate(input.dayOffDetail.startDate),
-      endDate:  formatDate(input.dayOffDetail.endDate),
+      startDate:  formatDate(input.dayOffDetail.startDate+" "+input.dayOffDetail.startTime),
+      endDate:  formatDate(input.dayOffDetail.endDate+" "+input.dayOffDetail.endTime),
       explanation: input.dayOffDetail.explanation,
       usedDayOff: input.dayOffDetail.usedDayOff,
     }
