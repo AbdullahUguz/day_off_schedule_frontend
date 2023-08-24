@@ -17,7 +17,6 @@ function DayOffDetail({setActiveBtn}) {
   
     const getDayOffById = async (employeeId) => {
       await fetchGetDayOffById({employeeId:employeeId}).then((res) => {
-        console.log("res : ",res);
         setDayOff(res);
       }).catch(err=>console.log(err));
     };

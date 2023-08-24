@@ -9,8 +9,8 @@ import {
   Row,
 } from "react-bootstrap";
 import validations from "./Validation";
-import { Field, useFormik } from "formik";
-import { fetchRegister, fetchEmailControl, fetchGetAllDepartment } from "../../api/api";
+import { useFormik } from "formik";
+import { fetchRegister, fetchGetAllDepartment } from "../../api/api";
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
 
@@ -56,7 +56,7 @@ function Register({ setActiveBtn }) {
         })
       })
       .catch((err) => {
-        if (err.response.status == 409) {
+        if (err.response.status === 409) {
           Swal.fire({
             position: 'top-end',
             icon: 'warning',

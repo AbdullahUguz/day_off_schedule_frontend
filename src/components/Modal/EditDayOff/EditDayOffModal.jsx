@@ -10,7 +10,6 @@ function EditDayOffModal({ dayOff, control, setControl }) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const [disableButton,setDisableButton] = useState(false);
   const [validationControl, setValidationControl] = useState(false);
 
   const startTimes = [{ time: "08:00" }, { time: "13:00" }];
@@ -95,7 +94,6 @@ function EditDayOffModal({ dayOff, control, setControl }) {
                 showConfirmButton: false,
                 timer: 1100
               })
-              console.log("delete: ", err)
             })
           Swal.fire(
             'Reset!',
@@ -133,7 +131,6 @@ function EditDayOffModal({ dayOff, control, setControl }) {
       },
       onSubmit: async (values, bag) => {
         try {
-          console.log("values : ", values)
           await addDayOffDetail(values, bag)
         } catch (err) {
           alert(err.response.statusText);
@@ -315,7 +312,6 @@ function EditDayOffModal({ dayOff, control, setControl }) {
                 className="mx-2"
                 type="submit"
                 onClick={() => setValidationControl(true)}
-                disabled={disableButton}
               >
                 Save Changes
               </Button>

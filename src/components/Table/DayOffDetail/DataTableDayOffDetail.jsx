@@ -2,7 +2,7 @@ import React from 'react'
 import DataTable from 'react-data-table-component'
 import EditDayOffModal from '../../Modal/EditDayOff/EditDayOffModal'
 
-function DataTableDayOff({dayOff,control,setControl}) {
+function DataTableDayOff({ dayOff, control, setControl }) {
 
   const columns = [
     {
@@ -38,10 +38,10 @@ function DataTableDayOff({dayOff,control,setControl}) {
       <div>
         <div>
           <div style={{ display: 'flex', justifyContent: 'left' }}>
-           <strong style={{marginRight:"5px"}}>Day Off :</strong>{dayOff.initialDayOff}
+            <strong style={{ marginRight: "5px" }}>Day Off :</strong>{dayOff.initialDayOff}
           </div>
           <div>
-          <strong style={{marginRight:"5px"}}>Remaining Day Off :</strong> {dayOff.remainingDayOff}
+            <strong style={{ marginRight: "5px" }}>Remaining Day Off :</strong> {dayOff.remainingDayOff}
           </div>
           <div>
             <EditDayOffModal dayOff={dayOff} control={control} setControl={setControl}></EditDayOffModal>
@@ -58,7 +58,7 @@ function DataTableDayOff({dayOff,control,setControl}) {
 
     </>
   ) : (<>
-  loading...
+    loading...
   </>)
 }
 

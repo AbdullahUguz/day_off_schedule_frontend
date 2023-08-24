@@ -15,7 +15,6 @@ function EditEmployeeModal({ employee, control, setControl }) {
     }
 
     const updateEmployee = async (input,bag) => {
-        console.log("employee from update : ",input)
         await fetchUpdateEmployee({
             employeeId: employee.id,
             employee: {
@@ -212,8 +211,6 @@ function EditEmployeeModal({ employee, control, setControl }) {
                             >
                                 Save Changes
                             </Button>)}
-
-
                         </div>
                     </Form>
                 </Modal.Body>

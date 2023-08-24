@@ -1,6 +1,6 @@
 import {object,string} from "yup";
 
-let departmentSchema = (num)=>object({
+let departmentSchema = ()=>object({
     name: string().required("This field cannot be left blank"),
 })
 

@@ -58,11 +58,11 @@ function DataTableComp({ employees, control, setControl }) {
     {
       name: "Day Off Detail",
       cell: (row) =>
-      <Link to={`daysOff/${row.id}`}>
-            <Button variant="info"  >
-              Day Off Detail
-            </Button>
-          </Link>
+        <Link to={`daysOff/${row.id}`}>
+          <Button variant="info"  >
+            Day Off Detail
+          </Button>
+        </Link>
       ,
       ignoreRowClick: true,
       allowOverflow: true,
@@ -101,7 +101,6 @@ function DataTableComp({ employees, control, setControl }) {
               await fetchDeleteEmployee({
                 employeeId: row.id
               }).then(res => {
-                console.log(res);
                 setControl(!control);
               }).catch(err => {
                 Swal.fire({
@@ -110,7 +109,6 @@ function DataTableComp({ employees, control, setControl }) {
                   showConfirmButton: false,
                   timer: 1100
                 })
-                console.log("delete: ", err)
               })
               Swal.fire(
                 'Deleted!',
@@ -119,7 +117,7 @@ function DataTableComp({ employees, control, setControl }) {
               )
             }
           })
-          
+
         }}>Delete</Button>
       ,
       ignoreRowClick: true,
@@ -148,20 +146,20 @@ function DataTableComp({ employees, control, setControl }) {
 
   return (
     <div>
-        <>
-          <DataTable
-            columns={columns}
-            data={filteredItems}
-            fixedHeader
-            pagination
-            paginationResetDefaultPage={resetPaginationToggle}
-            subHeader
-            subHeaderComponent={subHeaderComponentMemo}
-            persistTableHead
-            highlightOnHover
-          ></DataTable>
-        </>
-      
+      <>
+        <DataTable
+          columns={columns}
+          data={filteredItems}
+          fixedHeader
+          pagination
+          paginationResetDefaultPage={resetPaginationToggle}
+          subHeader
+          subHeaderComponent={subHeaderComponentMemo}
+          persistTableHead
+          highlightOnHover
+        ></DataTable>
+      </>
+
     </div>
   );
 }

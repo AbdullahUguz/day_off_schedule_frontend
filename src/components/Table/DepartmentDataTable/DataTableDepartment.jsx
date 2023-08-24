@@ -21,8 +21,8 @@ function DataTableDepartment({ departments, control, setControl }) {
         <>
             <div>
                 <div>
-                    <div  style={{ display: 'flex', justifyContent: 'right' }}>
-                        <AddDepartmentModal control={control} setControl={setControl}/>
+                    <div style={{ display: 'flex', justifyContent: 'right' }}>
+                        <AddDepartmentModal control={control} setControl={setControl} />
                     </div>
                     <DataTable
                         columns={columns}
