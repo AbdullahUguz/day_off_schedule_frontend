@@ -2,7 +2,7 @@
 
 Day Off Schedule is a software project developed to manage and monitor employees days off. It is built using the RaectJs.
 
-For the backend part, please visit: [Day Off Schedule Frontend Repository](https://github.com/AbdullahUguz/day_off_schedule_backend)
+For the backend part, please visit: [Day Off Schedule Backend Repository](https://github.com/AbdullahUguz/day_off_schedule_backend)
 
 ## Technologies Used
 
