@@ -10,6 +10,7 @@ function EditDayOffModal({ dayOff, control, setControl }) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const [disableButton,setDisableButton] = useState(false);
   const [validationControl, setValidationControl] = useState(false);
 
   const startTimes = [{ time: "08:00" }, { time: "13:00" }];
@@ -108,6 +109,20 @@ function EditDayOffModal({ dayOff, control, setControl }) {
     }
   }
 
+  const isWeekend = (dateString) => {
+    const date = new Date(dateString);
+    let cntrl = date.getDay() === 0 || date.getDay() === 6;
+    return cntrl;
+  }
+
+  const isGreater = (startString,endString) => {
+    const startDatee = new Date(startString);
+    const endDatee = new Date(endString);
+    let cntrl = startDatee > endDatee;
+  
+    return cntrl;
+  }
+
   const { handleSubmit, handleChange, handleBlur, values, errors, touched } =
     useFormik({
       initialValues: {
@@ -185,6 +200,13 @@ function EditDayOffModal({ dayOff, control, setControl }) {
               ) : (
                 <></>
               )}
+              {(values.startDate) && (isWeekend(values.startDate))
+                ? (<>
+                  <Alert variant="warning p-0 mt-1 px-2">
+                    Start date can not be weekend
+                  </Alert>
+                </>) : (<></>)}
+
             </Form.Group>
 
             <Form.Group className="mb-3">
@@ -224,6 +246,21 @@ function EditDayOffModal({ dayOff, control, setControl }) {
                 <></>
               )}
             </Form.Group>
+
+            {(values.endDate) && (isWeekend(values.startDate))
+              ? (<>
+                <Alert variant="warning p-0 mt-1 px-2">
+                  End date can not be weekend
+                </Alert>
+              </>) : (<></>)}
+
+            {(values.startDate && values.endDate) && (isGreater(values.startDate,values.endDate)) ? (
+                <>
+                  <Alert variant="warning p-0 mt-1 px-2">
+                    Start date cannot be greater than end date
+                  </Alert>
+                </>
+            ) : (<></>)}
 
             <Form.Group className="mb-3">
               <Form.Label className="text-bold">Used Day Off:</Form.Label>
@@ -269,57 +306,23 @@ function EditDayOffModal({ dayOff, control, setControl }) {
             <hr />
 
             <div style={{ display: 'flex', justifyContent: 'right' }}>
-              {new Date(values.startDate) <= new Date(values.endDate) ? (
-                <>
-                  <Button variant="secondary" onClick={handleClose}>
-                    Close
-                  </Button>
-                  <Button
-                    variant="primary"
-                    className="mx-2"
-                    type="submit"
-                    onClick={() => setValidationControl(true)}
-                  >
-                    Save Changes
-                  </Button></>
-              ) : (<>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <Alert variant="warning p-0 mt-1" style={{ flex: '1' }}>
-                    Start date cannot be greater than end date
-                  </Alert>
-                  <div>
-                    <Button variant="secondary" onClick={handleClose}>
-                      Close
-                    </Button>
-                  </div>
-                  <div>
-                    <Button
-                      variant="primary"
-                      className="mx-2"
-                      type="submit"
-                      onClick={() => setValidationControl(true)}
-                      disabled
-                    >
-                      Save Changes
-                    </Button>
-                  </div>
-                </div>
-              </>
-              )}
-
-              {/* <Button
+              <Button variant="secondary" onClick={handleClose}>
+                Close
+              </Button>
+              <Button
+                id="saveButton"
                 variant="primary"
                 className="mx-2"
                 type="submit"
                 onClick={() => setValidationControl(true)}
+                disabled={disableButton}
               >
                 Save Changes
-              </Button> */}
-
+              </Button>
             </div>
           </Form>
         </Modal.Body>
-      </Modal>
+      </Modal >
     </>
   );
 }
