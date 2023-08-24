@@ -35,7 +35,7 @@ function EditEmployeeModal({ employee, control, setControl }) {
                 })
             })
             .catch((err) => {
-                if (err.response.status == 409) {
+                if (err.response.status === 409) {
                     Swal.fire({
                         position: 'top-end',
                         icon: 'warning',

@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from "react";
 import DataTable from "react-data-table-component";
-import EditDayOffModal from "../../Modal/EditDayOff/EditDayOffModal";
 import FilterComponent from "./FilterComponent";
 import { Button } from "react-bootstrap";
 import EditEmployeeModal from "../../Modal/EditEpmloyee/EditEmployeeModal";
